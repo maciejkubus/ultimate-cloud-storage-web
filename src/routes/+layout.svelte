@@ -17,16 +17,25 @@
 
 <AppShell>
 	<svelte:fragment slot="header">
-		{#if user.loggedIn}
-			Header
-		{/if}
+		<div class="flex justify-between py-4 px-8">
+			<!-- <div>a</div> -->
+			<div
+				class="text-center flex-1 flex justify-center items-center text-xl font-bold tracking-wider"
+			>
+				ULTIMATE <img src="favicon.png" alt="logo" class="h-16 inline" /> STORAGE
+			</div>
+			{#if user.loggedIn}
+				<!-- <div> -->
+				<!-- <a href="/logout">Logout</a> -->
+				<!-- </div> -->
+			{/if}
+		</div>
 	</svelte:fragment>
-	<!-- <svelte:fragment slot="sidebarLeft">Sidebar Left</svelte:fragment> -->
 	<slot />
-
 	<svelte:fragment slot="pageFooter">
-		{#if user.loggedIn}
-			Footer
-		{/if}
+		<div class="w-full py-4 text-sm flex flex-col md:flex-row gap-2 items-center justify-center">
+			<div>Super Ultimate Storage &copy; Copywrite 2023</div>
+			<div><a href="https://github.com/maciejkubus/">Maciej Kubus</a></div>
+		</div>
 	</svelte:fragment>
 </AppShell>

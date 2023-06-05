@@ -72,6 +72,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Ultimate Cloud Storage - Sign up</title>
+</svelte:head>
+
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="space-y-4 p-4 w-full max-w-md">
 		<section>
