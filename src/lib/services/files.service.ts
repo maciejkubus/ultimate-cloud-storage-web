@@ -74,10 +74,12 @@ export class FilesService {
 			body: formData,
 		});
 
+		const body = await res.json();
+
 		if (!res.status.toString().startsWith('2')) {
-			throw new Error('Error uploading file');
+			throw new Error(body.message || body.messages[0]);
 		}
 
-		return await res.json();
+		return body;
 	}
 }

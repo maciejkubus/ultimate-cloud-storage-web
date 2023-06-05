@@ -14,10 +14,17 @@
 		if (!tempFile) return;
 
 		uploading = true;
-		await filesService.uploadFile(tempFile);
-		toastStore.trigger({
-			message: 'Your file has been uploaded successfully',
-		});
+		try {
+			await filesService.uploadFile(tempFile);
+			toastStore.trigger({
+				message: 'Your file has been uploaded successfully',
+			});
+		} catch (error) {
+			toastStore.trigger({
+				message: error + '',
+				background: 'variant-filled-error',
+			});
+		}
 		uploading = false;
 	};
 
