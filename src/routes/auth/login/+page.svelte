@@ -9,7 +9,6 @@
 	import { userStore } from '$lib/stores/user.store';
 	import type { UserStore } from '$lib/interfaces/user-store.interface';
 	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
 
 	let user: UserStore;
 
@@ -55,10 +54,6 @@
 	});
 
 	onMount(() => {
-		if (browser && user.loggedIn) {
-			window.location.href = '/';
-		}
-
 		const urlParams = new URLSearchParams(window.location.search);
 		const created = urlParams.get('created');
 		if (created) {
@@ -118,7 +113,7 @@
 					<button class="btn variant-filled-secondary w-full" disabled={loading}> Submit </button>
 					<div>
 						<p class="text-center">
-							Don't have an account? <a href="/signup">Sign up</a>
+							Don't have an account? <a href="/auth/signup">Sign up</a>
 						</p>
 					</div>
 				</div>

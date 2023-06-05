@@ -9,8 +9,6 @@
 	import { toastStore } from '@skeletonlabs/skeleton';
 	import { userStore } from '$lib/stores/user.store';
 	import type { UserStore } from '$lib/interfaces/user-store.interface';
-	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
 
 	let user: UserStore;
 
@@ -53,7 +51,7 @@
 				toastStore.trigger({
 					message: 'Account created successfully',
 				});
-				window.location.href = '/login?created=1';
+				window.location.href = '/auth/login?created=1';
 			} catch (e) {
 				toastStore.trigger({
 					message: e + '',
@@ -63,12 +61,6 @@
 			}
 			loading = false;
 		},
-	});
-
-	onMount(() => {
-		if (browser && user.loggedIn) {
-			window.location.href = '/';
-		}
 	});
 </script>
 
@@ -167,7 +159,7 @@
 				<button class="btn variant-filled-secondary w-full" disabled={loading}> Submit </button>
 				<div>
 					<p class="text-center">
-						Already have an account? <a href="/login">Log in</a>
+						Already have an account? <a href="/auth/login">Log in</a>
 					</p>
 				</div>
 			</form>
