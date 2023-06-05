@@ -6,7 +6,7 @@
 	const drawerSettings: DrawerSettings = {
 		id: 'menu',
 		bgDrawer: 'bg-surface-500',
-		bgBackdrop: 'bg-secondary-500 bg-opacity-20',
+		bgBackdrop: 'bg-surface-500 bg-opacity-20 backdrop-blur-sm',
 		width: 'w-full md:w-64',
 		padding: 'p-4',
 		rounded: 'rounded-lg',
