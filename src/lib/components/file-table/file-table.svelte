@@ -6,6 +6,7 @@
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import Checkmark from 'carbon-icons-svelte/lib/Checkmark.svelte';
 	import Close from 'carbon-icons-svelte/lib/Close.svelte';
+	import FileUploader from '../file-uploader/file-uploader.svelte';
 
 	const filesService = FilesService.getInstance();
 	export let files: File[] = [];
@@ -95,4 +96,8 @@
 			{/each}
 		</tbody>
 	</table>
+
+	<div class="w-full p-4 sm:p-0 mt-8">
+		<FileUploader />
+	</div>
 </div>

@@ -5,6 +5,7 @@
 	import type { UserStore } from '$lib/interfaces/user-store.interface';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import FileUploader from '$lib/components/file-uploader/file-uploader.svelte';
 
 	$: positionClasses = $drawerStore.open ? 'scale-[120%]' : '';
 
@@ -26,7 +27,7 @@
 		menu
 	{/if}
 </Drawer>
-<main class="transition-transform duration-400 ease-in {positionClasses} h-full">
+<main class="transition-transform duration-400 ease-in {positionClasses} h-full relative">
 	<AppShell
 		slotSidebarLeft="flex w-5/6 md:w-64"
 		class="transition-transform {positionClasses}"
@@ -35,7 +36,7 @@
 		<svelte:fragment slot="header">
 			<Header />
 		</svelte:fragment>
-		<div class="container h-full mx-auto flex justify-center items-center">
+		<div class="container h-full mx-auto flex justify-center items-center flex-row">
 			<slot />
 		</div>
 		<svelte:fragment slot="pageFooter" />
