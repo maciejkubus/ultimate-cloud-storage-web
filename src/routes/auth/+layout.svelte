@@ -13,7 +13,7 @@
 
 	onMount(() => {
 		if (browser && user.loggedIn) {
-			window.location.href = '/dashboard/';
+			window.location.href = '/app/';
 		}
 	});
 </script>
