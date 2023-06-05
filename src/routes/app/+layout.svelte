@@ -26,7 +26,7 @@
 		menu
 	{/if}
 </Drawer>
-<main class="transition-transform duration-400 ease-in {positionClasses}">
+<main class="transition-transform duration-400 ease-in {positionClasses} h-full">
 	<AppShell
 		slotSidebarLeft="flex w-5/6 md:w-64"
 		class="transition-transform {positionClasses}"
@@ -35,10 +35,9 @@
 		<svelte:fragment slot="header">
 			<Header />
 		</svelte:fragment>
-		<!-- <svelte:fragment slot="sidebarLeft">
-		<NavBar />
-	</svelte:fragment> -->
-		<slot />
+		<div class="container h-full mx-auto flex justify-center items-center">
+			<slot />
+		</div>
 		<svelte:fragment slot="pageFooter" />
 	</AppShell>
 </main>

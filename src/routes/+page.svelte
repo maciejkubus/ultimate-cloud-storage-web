@@ -14,7 +14,7 @@
 	onMount(() => {
 		if (browser) {
 			if (user.loggedIn) {
-				window.location.href = '/dashboard/';
+				window.location.href = '/app/';
 			} else {
 				window.location.href = '/auth/login';
 			}
