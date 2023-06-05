@@ -1,5 +1,5 @@
 import { config } from '$lib/config';
-import type { File } from '$lib/interfaces/file.interface';
+import type { File as UserFile } from '$lib/interfaces/file.interface';
 import type { UserStore } from '$lib/interfaces/user-store.interface';
 import { userStore } from '$lib/stores/user.store';
 
@@ -38,7 +38,7 @@ export class FilesService {
 		a.remove();
 	}
 
-	public async getAllMineFiles(): Promise<File[]> {
+	public async getAllMineFiles(): Promise<UserFile[]> {
 		const res = await fetch(config.apiBaseUrl + '/files/mine', {
 			method: 'GET',
 			headers: {
@@ -60,5 +60,24 @@ export class FilesService {
 		if (res.status !== 200) {
 			throw new Error('Error deleting file');
 		}
+	}
+
+	public async uploadFile(file: File): Promise<UserFile> {
+		const formData = new FormData();
+		formData.append('file', file);
+
+		const res = await fetch(config.apiBaseUrl + '/files', {
+			method: 'POST',
+			headers: {
+				Authorization: 'Bearer ' + FilesService.user.access_token,
+			},
+			body: formData,
+		});
+
+		if (!res.status.toString().startsWith('2')) {
+			throw new Error('Error uploading file');
+		}
+
+		return await res.json();
 	}
 }

@@ -1,41 +1,47 @@
 <script lang="ts">
-	import { FileDropzone } from '@skeletonlabs/skeleton';
-	import CloudUpload from 'carbon-icons-svelte/lib/CloudUpload.svelte';
+	import { FileDropzone, toastStore } from '@skeletonlabs/skeleton';
+	import { FilesService } from '$lib/services/files.service';
 
-	const file = {
-		name: '',
-		size: 0,
-		type: '*/*',
-		lastModified: 0,
-	};
+	const filesService = FilesService.getInstance();
 
-	const fileChange = (event: any) => {
+	let files: FileList;
+	let uploading = false;
+
+	const fileChange = async (event: any) => {
+		if (uploading) return;
+
 		const tempFile = event?.target?.files[0];
 		if (!tempFile) return;
 
-		file.name = tempFile.name;
-		file.size = tempFile.size;
-		file.type = tempFile.type;
-		file.lastModified = tempFile.lastModified;
+		uploading = true;
+		await filesService.uploadFile(tempFile);
+		toastStore.trigger({
+			message: 'Your file has been uploaded successfully',
+		});
+		uploading = false;
 	};
+
+	const submit = () => {};
 </script>
 
 <div class="p-4 flex">
-	<FileDropzone name="files" on:change={fileChange}>
-		<svelte:fragment slot="lead" />
-		<svelte:fragment slot="message">
-			{#if file.size < 1}
-				<strong>Upload a file</strong> or drag and drop
-			{:else}
-				<strong>Click or drag files here to upload</strong>
-			{/if}
-		</svelte:fragment>
-		<svelte:fragment slot="meta">
-			{#if file.size < 1}
-				max. 100 MB
-			{:else}
-				{file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
-			{/if}
-		</svelte:fragment>
-	</FileDropzone>
+	<form class="contents" on:submit|preventDefault={submit} enctype="multipart/form-data">
+		<FileDropzone name="files" on:change={fileChange} bind:files>
+			<svelte:fragment slot="lead" />
+			<svelte:fragment slot="message">
+				{#if uploading}
+					<strong>Uploading </strong>
+				{:else}
+					<strong>Click or drag files here to upload</strong>
+				{/if}
+			</svelte:fragment>
+			<svelte:fragment slot="meta">
+				{#if uploading}
+					{files[0].name} ({(files[0].size / 1024 / 1024).toFixed(2)} MB)
+				{:else}
+					max. 100 MB
+				{/if}
+			</svelte:fragment>
+		</FileDropzone>
+	</form>
 </div>
