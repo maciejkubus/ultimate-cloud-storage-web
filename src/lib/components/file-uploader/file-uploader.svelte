@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { FileDropzone, toastStore } from '@skeletonlabs/skeleton';
 	import { FilesService } from '$lib/services/files.service';
+	import { createEventDispatcher } from 'svelte';
 
 	const filesService = FilesService.getInstance();
+
+	const dispatch = createEventDispatcher();
 
 	let files: FileList;
 	let uploading = false;
@@ -15,10 +18,11 @@
 
 		uploading = true;
 		try {
-			await filesService.uploadFile(tempFile);
+			const uploadedFile = await filesService.uploadFile(tempFile);
 			toastStore.trigger({
 				message: 'Your file has been uploaded successfully',
 			});
+			dispatch('uploaded', uploadedFile);
 		} catch (error) {
 			toastStore.trigger({
 				message: error + '',

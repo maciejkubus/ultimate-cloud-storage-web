@@ -7,10 +7,25 @@
 	import Checkmark from 'carbon-icons-svelte/lib/Checkmark.svelte';
 	import Close from 'carbon-icons-svelte/lib/Close.svelte';
 	import FileUploader from '../file-uploader/file-uploader.svelte';
+	import { onMount } from 'svelte';
+	import FileTools from '../file-tools/file-tools.svelte';
 
 	const filesService = FilesService.getInstance();
 	export let files: File[] = [];
 	let toDelete: number = 0;
+	let checkedRows: number[] = [];
+
+	const checkRow = (id: number) => {
+		if (checkedRows.includes(id)) {
+			checkedRows = checkedRows.filter((row) => row !== id);
+		} else {
+			checkedRows = [...checkedRows, id];
+		}
+	};
+
+	const clearRows = () => {
+		checkedRows = [];
+	};
 
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString).toLocaleDateString();
@@ -33,6 +48,10 @@
 		await filesService.deleteFile(toDelete);
 		files = await filesService.getAllMineFiles();
 	};
+
+	const uploaded = (event: CustomEvent<File>) => {
+		files = [...files, event.detail];
+	};
 </script>
 
 <div class="card p-4 variant-filled-primary" data-popup="confirmRemoveClick">
@@ -40,7 +59,7 @@
 	<div class="w-100 flex justify-center items-center mt-2 flex-row gap-2 flex-nowrap">
 		<button
 			class="p-1 variant-filled-primary hover:variant-filled-success transition-colors rounded-full close-btn"
-			on:click={deleteFile}
+			on:click|preventDefault={deleteFile}
 		>
 			<Checkmark size={20} />
 		</button>
@@ -53,7 +72,7 @@
 </div>
 
 <div class="table-container w-full p-4 sm:p-0">
-	<!-- Native Table Element -->
+	<FileTools {checkedRows} on:addedToAlbum={clearRows} />
 	<table class="table variant-ghost table-hover table-interactive w-full">
 		<thead>
 			<tr>
@@ -67,7 +86,12 @@
 		</thead>
 		<tbody>
 			{#each files as row, i}
-				<tr class="h-14">
+				<tr
+					class="h-14"
+					class:table-row-checked={checkedRows.includes(row.id)}
+					id="file-table-{i}"
+					on:click={() => checkRow(row.id)}
+				>
 					<td class="font-bold text-center hidden sm:table-cell">{row.id}</td>
 					<td class="overflow-hidden text-ellipsis whitespace-nowrap max-w-sm">
 						{row.originalName}
@@ -77,17 +101,17 @@
 					<td class="hidden md:table-cell">{formatDate(row.created)}</td>
 					<td class="flex justify-center items-center gap-2">
 						<button
-							on:click={() => {
+							on:click|preventDefault={() => {
 								filesService.downloadFile(row.id, row.originalName);
 							}}
-							class="hover:text-secondary-500"
+							class="text-tertiary-500 hover:text-primary-500"
 						>
 							<Download size={24} />
 						</button>
 						<button
 							use:popup={confirmRemoveClick}
-							on:click={() => (toDelete = row.id)}
-							class="hover:text-secondary-500"
+							on:click|preventDefault={() => (toDelete = row.id)}
+							class="text-tertiary-500 hover:text-primary-500"
 						>
 							<TrashCan size={24} />
 						</button>
@@ -98,6 +122,6 @@
 	</table>
 
 	<div class="w-full p-4 sm:p-0 mt-8">
-		<FileUploader />
+		<FileUploader on:uploaded={uploaded} />
 	</div>
 </div>
