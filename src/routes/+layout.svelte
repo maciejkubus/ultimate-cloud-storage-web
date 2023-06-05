@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { AppShell } from '@skeletonlabs/skeleton';
+	import { AppShell, Toast } from '@skeletonlabs/skeleton';
 	import '../style/theme.postcss';
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import '../style/app.postcss';
@@ -13,6 +13,8 @@
 	});
 </script>
 
+<Toast />
+
 <AppShell>
 	<svelte:fragment slot="header">
 		{#if user.loggedIn}
@@ -21,6 +23,7 @@
 	</svelte:fragment>
 	<!-- <svelte:fragment slot="sidebarLeft">Sidebar Left</svelte:fragment> -->
 	<slot />
+
 	<svelte:fragment slot="pageFooter">
 		{#if user.loggedIn}
 			Footer
