@@ -27,8 +27,6 @@ export class FilesService {
 				Authorization: 'Bearer ' + FilesService.user.access_token,
 			},
 		});
-		const c = res.headers.get('content-disposition');
-		console.log(c);
 
 		const blob = await res.blob();
 		const url = window.URL.createObjectURL(blob);
@@ -50,5 +48,17 @@ export class FilesService {
 		});
 		const files = await res.json();
 		return files;
+	}
+
+	public async deleteFile(id: number): Promise<void> {
+		const res = await fetch(config.apiBaseUrl + '/files/' + id, {
+			method: 'DELETE',
+			headers: {
+				Authorization: 'Bearer ' + FilesService.user.access_token,
+			},
+		});
+		if (res.status !== 200) {
+			throw new Error('Error deleting file');
+		}
 	}
 }
