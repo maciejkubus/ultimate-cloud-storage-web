@@ -51,29 +51,29 @@
 	</div>
 </div>
 
-<div class="table-container w-full">
+<div class="table-container w-full p-4 sm:p-0">
 	<!-- Native Table Element -->
 	<table class="table variant-ghost table-hover table-interactive w-full">
 		<thead>
 			<tr>
-				<th class="w-1/12 text-center">ID</th>
+				<th class="w-1/12 text-center hidden sm:table-cell">ID</th>
 				<th class="w-4/12">Name</th>
-				<th class="w-2/12">Type</th>
-				<th class="w-2/12">Size</th>
-				<th class="w-2/12">Created</th>
+				<th class="w-2/12 hidden md:table-cell">Type</th>
+				<th class="w-2/12 hidden md:table-cell">Size</th>
+				<th class="w-2/12 hidden md:table-cell">Created</th>
 				<th class="w-1/12 text-center">Actions</th>
 			</tr>
 		</thead>
 		<tbody>
 			{#each files as row, i}
 				<tr class="h-14">
-					<td class="font-bold text-center">{row.id}</td>
+					<td class="font-bold text-center hidden sm:table-cell">{row.id}</td>
 					<td class="overflow-hidden text-ellipsis whitespace-nowrap max-w-sm">
 						{row.originalName}
 					</td>
-					<td>{row.mimetype}</td>
-					<td>{formatSize(row.size)}</td>
-					<td>{formatDate(row.created)}</td>
+					<td class="hidden md:table-cell">{row.mimetype}</td>
+					<td class="hidden md:table-cell">{formatSize(row.size)}</td>
+					<td class="hidden md:table-cell">{formatDate(row.created)}</td>
 					<td class="flex justify-center items-center gap-2">
 						<button
 							on:click={() => {
