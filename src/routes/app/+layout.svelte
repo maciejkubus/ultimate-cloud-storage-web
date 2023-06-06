@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import FileUploader from '$lib/components/file-uploader/file-uploader.svelte';
+	import DrawerLeft from '$lib/components/drawer-left/drawer-left.svelte';
 
 	$: positionClasses = $drawerStore.open ? 'scale-[120%]' : '';
 
@@ -24,7 +25,7 @@
 
 <Drawer>
 	{#if $drawerStore.id === 'menu'}
-		menu
+		<DrawerLeft />
 	{/if}
 </Drawer>
 <main class="transition-transform duration-400 ease-in {positionClasses} h-full relative">

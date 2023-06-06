@@ -31,7 +31,7 @@
 	<slot />
 	<svelte:fragment slot="pageFooter">
 		<div class="w-full py-4 text-sm flex flex-col md:flex-row gap-2 items-center justify-center">
-			<div>Super Ultimate Storage &copy; Copywrite 2023</div>
+			<div>Ultimate Cloud Storage &copy; Copywrite 2023</div>
 			<div><a href="https://github.com/maciejkubus/">Maciej Kubus</a></div>
 		</div>
 	</svelte:fragment>
