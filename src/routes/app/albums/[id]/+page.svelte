@@ -32,6 +32,6 @@
 
 {#if loaded}
 	<div class="w-full max-w-6xl">
-		<FileTable {files} />
+		<FileTable {files} {album} />
 	</div>
 {/if}

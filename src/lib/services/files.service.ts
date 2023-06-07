@@ -50,7 +50,7 @@ export class FilesService {
 		return files;
 	}
 
-	public async deleteFile(id: number): Promise<void> {
+	public async deleteFile(id: number): Promise<boolean> {
 		const res = await fetch(config.apiBaseUrl + '/files/' + id, {
 			method: 'DELETE',
 			headers: {
@@ -60,6 +60,7 @@ export class FilesService {
 		if (res.status !== 200) {
 			throw new Error('Error deleting file');
 		}
+		return true;
 	}
 
 	public async uploadFile(file: File): Promise<UserFile> {
@@ -81,5 +82,24 @@ export class FilesService {
 		}
 
 		return body;
+	}
+
+	public async removeFileFromAlbum(fileId: number, albumId: number): Promise<boolean> {
+		const res = await fetch(config.apiBaseUrl + '/albums/' + albumId + '/remove', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + FilesService.user.access_token,
+			},
+			body: JSON.stringify({
+				files: [fileId],
+			}),
+		});
+
+		if (!res.status.toString().startsWith('2')) {
+			throw new Error('Error removing file from album');
+		}
+
+		return true;
 	}
 }

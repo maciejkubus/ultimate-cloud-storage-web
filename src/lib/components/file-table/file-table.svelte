@@ -1,18 +1,20 @@
 <script lang="ts">
 	import type { File } from '$lib/interfaces/file.interface';
 	import { FilesService } from '$lib/services/files.service';
-	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
-	import Checkmark from 'carbon-icons-svelte/lib/Checkmark.svelte';
-	import Close from 'carbon-icons-svelte/lib/Close.svelte';
 	import FileUploader from '../file-uploader/file-uploader.svelte';
-	import { onMount } from 'svelte';
 	import FileTools from '../file-tools/file-tools.svelte';
+	import { modalStore } from '@skeletonlabs/skeleton';
+	import FolderOff from 'carbon-icons-svelte/lib/FolderOff.svelte';
+	import type { Album } from '$lib/interfaces/album.interface';
+	import { AlbumsService } from '$lib/services/albums.service';
 
-	const filesService = FilesService.getInstance();
 	export let files: File[] = [];
-	let toDelete: number = 0;
+	export let album: Album | null = null;
+
+	const albumsService = AlbumsService.getInstance();
+	const filesService = FilesService.getInstance();
 	let checkedRows: number[] = [];
 
 	const checkRow = (id: number) => {
@@ -37,39 +39,42 @@
 		return megaBytes.toFixed(2) + ' MB';
 	};
 
-	const confirmRemoveClick: PopupSettings = {
-		event: 'click',
-		target: 'confirmRemoveClick',
-		placement: 'top',
-		closeQuery: '.close-btn',
+	const openModalRemoveFile = (file: File) => {
+		modalStore.trigger({
+			type: 'confirm',
+			title: 'Remove file',
+			body: 'Remove file ' + file.originalName + '?',
+			response: async (response: boolean) => {
+				if (!response) return;
+
+				const success = await filesService.deleteFile(file.id);
+				if (success) files = files.filter((f) => f.id !== file.id);
+			},
+		});
 	};
 
-	const deleteFile = async () => {
-		await filesService.deleteFile(toDelete);
-		files = await filesService.getAllMineFiles();
+	const openModalRemoveFileFromAlbum = (file: File) => {
+		modalStore.trigger({
+			type: 'confirm',
+			title: 'Remove file from album',
+			body: 'Remove file ' + file.originalName + ' from album ' + album?.title + '?',
+			response: async (response: boolean) => {
+				if (!response) return;
+				if (!album) return;
+
+				const success = await filesService.removeFileFromAlbum(file.id, album.id);
+				if (success) files = files.filter((f) => f.id !== file.id);
+			},
+		});
 	};
 
-	const uploaded = (event: CustomEvent<File>) => {
+	const uploaded = async (event: CustomEvent<File>) => {
+		if (album) {
+			await albumsService.addFilesToAlbum(album.id, [event.detail.id]);
+		}
 		files = [...files, event.detail];
 	};
 </script>
-
-<div class="card p-4 variant-filled-primary" data-popup="confirmRemoveClick">
-	<div>Are you sure you want to delete this file?</div>
-	<div class="w-100 flex justify-center items-center mt-2 flex-row gap-2 flex-nowrap">
-		<button
-			class="p-1 variant-filled-primary hover:variant-filled-success transition-colors rounded-full close-btn"
-			on:click|preventDefault={deleteFile}
-		>
-			<Checkmark size={20} />
-		</button>
-		<button
-			class="p-1 variant-filled-primary hover:variant-filled-error transition-colors rounded-full close-btn"
-		>
-			<Close size={20} />
-		</button>
-	</div>
-</div>
 
 <div class="table-container w-full p-4 sm:p-0">
 	<FileTools {checkedRows} on:addedToAlbum={clearRows} />
@@ -112,12 +117,19 @@
 								<Download size={24} />
 							</button>
 							<button
-								use:popup={confirmRemoveClick}
-								on:click|stopPropagation|preventDefault={() => (toDelete = row.id)}
+								on:click|stopPropagation|preventDefault={() => openModalRemoveFile(row)}
 								class="text-tertiary-500 hover:text-primary-500"
 							>
 								<TrashCan size={24} />
 							</button>
+							{#if album}
+								<button
+									on:click|stopPropagation|preventDefault={() => openModalRemoveFileFromAlbum(row)}
+									class="text-tertiary-500 hover:text-primary-500"
+								>
+									<FolderOff size={24} />
+								</button>
+							{/if}
 						</div>
 					</td>
 				</tr>
