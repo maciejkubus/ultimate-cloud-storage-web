@@ -39,7 +39,7 @@
 	};
 </script>
 
-<div class="w-full flex justify-between py-8">
+<div class="w-full flex justify-between pb-8">
 	<div class="">
 		<button class="btn btn-primary variant-filled-secondary" use:popup={popupCombobox}>
 			<FolderAdd size={24} /> <span>Add to album</span>

@@ -5,7 +5,6 @@
 	import type { UserStore } from '$lib/interfaces/user-store.interface';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
-	import FileUploader from '$lib/components/file-uploader/file-uploader.svelte';
 	import DrawerLeft from '$lib/components/drawer-left/drawer-left.svelte';
 
 	$: positionClasses = $drawerStore.open ? 'scale-[120%]' : '';
@@ -37,7 +36,7 @@
 		<svelte:fragment slot="header">
 			<Header />
 		</svelte:fragment>
-		<div class="container h-full mx-auto flex justify-center items-center flex-row">
+		<div class="container h-full mx-auto flex justify-center flex-row py-8">
 			<slot />
 		</div>
 		<svelte:fragment slot="pageFooter" />

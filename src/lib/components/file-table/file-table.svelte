@@ -76,12 +76,12 @@
 	<table class="table variant-ghost table-hover table-interactive w-full">
 		<thead>
 			<tr>
-				<th class="w-1/12 text-center hidden sm:table-cell">ID</th>
-				<th class="w-4/12">Name</th>
-				<th class="w-2/12 hidden md:table-cell">Type</th>
-				<th class="w-2/12 hidden md:table-cell">Size</th>
-				<th class="w-2/12 hidden md:table-cell">Created</th>
-				<th class="w-1/12 text-center">Actions</th>
+				<th class="sm:w-1/12 text-center hidden sm:table-cell">ID</th>
+				<th class="w-full sm:w-4/12">Name</th>
+				<th class="sm:w-2/12 hidden xl:table-cell">Type</th>
+				<th class="sm:w-2/12 hidden xl:table-cell">Size</th>
+				<th class="sm:w-2/12 hidden md:table-cell">Created</th>
+				<th class="sm:w-1/12 text-center">Actions</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -93,28 +93,32 @@
 					on:click={() => checkRow(row.id)}
 				>
 					<td class="font-bold text-center hidden sm:table-cell">{row.id}</td>
-					<td class="overflow-hidden text-ellipsis whitespace-nowrap max-w-sm">
+					<td
+						class="overflow-hidden text-ellipsis whitespace-nowrap w-[120px] max-w-[120px] sm:max-w-sm"
+					>
 						{row.originalName}
 					</td>
-					<td class="hidden md:table-cell">{row.mimetype}</td>
-					<td class="hidden md:table-cell">{formatSize(row.size)}</td>
+					<td class="hidden xl:table-cell">{row.mimetype}</td>
+					<td class="hidden xl:table-cell">{formatSize(row.size)}</td>
 					<td class="hidden md:table-cell">{formatDate(row.created)}</td>
-					<td class="flex justify-center items-center gap-2">
-						<button
-							on:click|preventDefault={() => {
-								filesService.downloadFile(row.id, row.originalName);
-							}}
-							class="text-tertiary-500 hover:text-primary-500"
-						>
-							<Download size={24} />
-						</button>
-						<button
-							use:popup={confirmRemoveClick}
-							on:click|preventDefault={() => (toDelete = row.id)}
-							class="text-tertiary-500 hover:text-primary-500"
-						>
-							<TrashCan size={24} />
-						</button>
+					<td>
+						<div class="flex justify-center items-center gap-2 w-min sm:w-full">
+							<button
+								on:click|preventDefault={() => {
+									filesService.downloadFile(row.id, row.originalName);
+								}}
+								class="text-tertiary-500 hover:text-primary-500"
+							>
+								<Download size={24} />
+							</button>
+							<button
+								use:popup={confirmRemoveClick}
+								on:click|preventDefault={() => (toDelete = row.id)}
+								class="text-tertiary-500 hover:text-primary-500"
+							>
+								<TrashCan size={24} />
+							</button>
+						</div>
 					</td>
 				</tr>
 			{/each}

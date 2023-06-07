@@ -35,7 +35,7 @@
 	const submit = () => {};
 </script>
 
-<div class="p-4 flex">
+<div class="flex">
 	<form class="contents" on:submit|preventDefault={submit} enctype="multipart/form-data">
 		<FileDropzone name="files" on:change={fileChange} bind:files>
 			<svelte:fragment slot="lead" />
