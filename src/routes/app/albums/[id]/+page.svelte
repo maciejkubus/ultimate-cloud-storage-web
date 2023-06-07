@@ -28,5 +28,7 @@
 </svelte:head>
 
 {#if loaded}
-	<FileTable {files} />
+	<div class="w-full max-w-6xl">
+		<FileTable {files} />
+	</div>
 {/if}
