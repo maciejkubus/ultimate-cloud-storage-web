@@ -5,6 +5,7 @@
 	import Star from 'carbon-icons-svelte/lib/Star.svelte';
 	import ImageCopy from 'carbon-icons-svelte/lib/ImageCopy.svelte';
 	import { drawerStore } from '@skeletonlabs/skeleton';
+	import { goto } from '$app/navigation';
 
 	let albums: Album[] = [];
 
@@ -26,15 +27,38 @@
 		</div>
 		<ul class="list list-nav mb-4">
 			<li class="w-full flex items-stretch justify-stretch pr-4">
-				<a on:click={() => drawerStore.close()} href="/" class="text-primary-500 w-full"> Home </a>
+				<a
+					on:click={() => {
+						drawerStore.close();
+						goto('/app');
+					}}
+					href="/app"
+					class="text-primary-500 w-full"
+				>
+					Home
+				</a>
 			</li>
 			<li class="w-full flex items-stretch justify-stretch pr-4">
-				<a on:click={() => drawerStore.close()} href="/app/" class="text-primary-500 w-full">
+				<a
+					on:click={() => {
+						drawerStore.close();
+						goto('/app');
+					}}
+					href="/app"
+					class="text-primary-500 w-full"
+				>
 					Files
 				</a>
 			</li>
 			<li class="w-full flex items-stretch justify-stretch pr-4">
-				<a on:click={() => drawerStore.close()} href="/app/albums" class="text-primary-500 w-full">
+				<a
+					on:click={() => {
+						drawerStore.close();
+						goto('/app/albums');
+					}}
+					href="/app/albums"
+					class="text-primary-500 w-full"
+				>
 					Albums
 				</a>
 			</li>
@@ -49,7 +73,10 @@
 			{#each albums as album}
 				<li class="w-full flex items-stretch justify-stretch pr-4">
 					<a
-						on:click={() => drawerStore.close()}
+						on:click|preventDefault={() => {
+							drawerStore.close();
+							goto('/app/albums/' + album.id);
+						}}
 						href="/app/albums/{album.id}"
 						class="text-primary-500 w-full"
 					>

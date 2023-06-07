@@ -9,6 +9,7 @@
 	import { userStore } from '$lib/stores/user.store';
 	import type { UserStore } from '$lib/interfaces/user-store.interface';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	let user: UserStore;
 
@@ -113,7 +114,10 @@
 					<button class="btn variant-filled-secondary w-full" disabled={loading}> Submit </button>
 					<div>
 						<p class="text-center">
-							Don't have an account? <a href="/auth/signup">Sign up</a>
+							Don't have an account? <a
+								href="/auth/signup"
+								on:click|preventDefault={() => goto('/auth/signup')}>Sign up</a
+							>
 						</p>
 					</div>
 				</div>

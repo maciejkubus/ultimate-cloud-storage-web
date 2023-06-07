@@ -113,7 +113,7 @@
 							</button>
 							<button
 								use:popup={confirmRemoveClick}
-								on:click|preventDefault={() => (toDelete = row.id)}
+								on:click|stopPropagation|preventDefault={() => (toDelete = row.id)}
 								class="text-tertiary-500 hover:text-primary-500"
 							>
 								<TrashCan size={24} />

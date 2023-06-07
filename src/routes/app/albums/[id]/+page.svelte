@@ -5,22 +5,25 @@
 	import { page } from '$app/stores';
 	import { AlbumsService } from '$lib/services/albums.service';
 	import type { Album } from '$lib/interfaces/album.interface';
+	import { afterNavigate } from '$app/navigation';
 
 	let files: File[] = [];
-	let albumId = +$page.params.id;
 	let album: Album | null = null;
 	let loaded = false;
 
 	const albumsService = AlbumsService.getInstance();
 
-	onMount(async () => {
-		album = await albumsService.getAlbum(albumId);
+	const loadAlbum = async () => {
+		loaded = false;
+		album = await albumsService.getAlbum(+$page.params.id);
 		files = album?.files || [];
 
 		if (album && album.id) {
 			loaded = true;
 		}
-	});
+	};
+
+	afterNavigate(loadAlbum);
 </script>
 
 <svelte:head>

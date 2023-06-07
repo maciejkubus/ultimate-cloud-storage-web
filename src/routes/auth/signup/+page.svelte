@@ -9,6 +9,7 @@
 	import { toastStore } from '@skeletonlabs/skeleton';
 	import { userStore } from '$lib/stores/user.store';
 	import type { UserStore } from '$lib/interfaces/user-store.interface';
+	import { goto } from '$app/navigation';
 
 	let user: UserStore;
 
@@ -141,7 +142,12 @@
 					</FormInput>
 					<FormCheckbox>
 						<span slot="label">
-							I agree to the <a href="/privacy-policy"> Privacy Policy </a>
+							I agree to the <a
+								href="/privacy-policy"
+								on:click|preventDefault={() => goto('/privacy-policy')}
+							>
+								Privacy Policy
+							</a>
 						</span>
 						<input
 							slot="input"
@@ -159,7 +165,10 @@
 				<button class="btn variant-filled-secondary w-full" disabled={loading}> Submit </button>
 				<div>
 					<p class="text-center">
-						Already have an account? <a href="/auth/login">Log in</a>
+						Already have an account? <a
+							href="/auth/login"
+							on:click|preventDefault={() => goto('/auth/login')}>Log in</a
+						>
 					</p>
 				</div>
 			</form>

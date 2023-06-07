@@ -36,7 +36,7 @@
 		<svelte:fragment slot="header">
 			<Header />
 		</svelte:fragment>
-		<div class="container h-full mx-auto flex justify-center flex-row py-8">
+		<div class="container h-full mx-auto flex justify-center flex-row p-8">
 			<slot />
 		</div>
 		<svelte:fragment slot="pageFooter" />
