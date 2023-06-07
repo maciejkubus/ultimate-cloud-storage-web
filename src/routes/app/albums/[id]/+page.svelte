@@ -6,6 +6,7 @@
 	import { AlbumsService } from '$lib/services/albums.service';
 	import type { Album } from '$lib/interfaces/album.interface';
 	import { afterNavigate } from '$app/navigation';
+	import { pageMetadataStore } from '$lib/stores/page-metadata.store';
 
 	let files: File[] = [];
 	let album: Album | null = null;
@@ -20,6 +21,10 @@
 
 		if (album && album.id) {
 			loaded = true;
+
+			pageMetadataStore.set({
+				title: 'Album - ' + album.title,
+			});
 		}
 	};
 
@@ -31,7 +36,5 @@
 </svelte:head>
 
 {#if loaded}
-	<div class="w-full max-w-6xl">
-		<FileTable {files} {album} />
-	</div>
+	<FileTable {files} {album} />
 {/if}

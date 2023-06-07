@@ -6,13 +6,23 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import DrawerLeft from '$lib/components/drawer-left/drawer-left.svelte';
+	import type { PageMetadataStore } from '$lib/interfaces/page-metadata.inerface';
+	import { pageMetadataStore } from '$lib/stores/page-metadata.store';
 
 	$: positionClasses = $drawerStore.open ? 'scale-[120%]' : '';
 
 	let user: UserStore;
 
+	let pageMetadata: PageMetadataStore = {
+		title: '',
+	};
+
 	userStore.subscribe((value) => {
 		user = value;
+	});
+
+	pageMetadataStore.subscribe((value) => {
+		pageMetadata = value;
 	});
 
 	onMount(() => {
@@ -37,7 +47,10 @@
 			<Header />
 		</svelte:fragment>
 		<div class="container h-full mx-auto flex justify-center flex-row p-8">
-			<slot />
+			<div class="w-full max-w-6xl">
+				<h1 class="text-3xl font-bold mb-8">{pageMetadata.title}</h1>
+				<slot />
+			</div>
 		</div>
 		<svelte:fragment slot="pageFooter" />
 	</AppShell>

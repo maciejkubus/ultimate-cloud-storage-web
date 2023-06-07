@@ -3,15 +3,17 @@
 	import { FilesService } from '$lib/services/files.service';
 	import { onMount } from 'svelte';
 	import type { File } from '$lib/interfaces/file.interface';
+	import { pageMetadataStore } from '$lib/stores/page-metadata.store';
 	export let files: File[] = [];
 
 	const filesService = FilesService.getInstance();
 
 	onMount(async () => {
 		files = await filesService.getAllMineFiles();
+		pageMetadataStore.set({
+			title: 'All Files',
+		});
 	});
 </script>
 
-<div class="w-full max-w-6xl">
-	<FileTable {files} />
-</div>
+<FileTable {files} />
