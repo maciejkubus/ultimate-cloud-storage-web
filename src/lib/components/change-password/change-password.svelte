@@ -52,7 +52,7 @@
 	});
 </script>
 
-<div class="card variant-glass-tertiary text-primary-500 p-8 w-full sm:w-3/4 md:w-1/2">
+<div class="card variant-glass-tertiary text-primary-500 p-8 w-full md:w-1/2">
 	<h3 class="h3">Change your password</h3>
 	<form on:submit|preventDefault={handleSubmit} class="mt-8">
 		<FormInput>
