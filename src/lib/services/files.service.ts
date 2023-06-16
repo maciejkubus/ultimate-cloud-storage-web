@@ -38,6 +38,18 @@ export class FilesService {
 		a.remove();
 	}
 
+	public async getFileBlob(id: number, name: string): Promise<Blob> {
+		const res = await fetch(config.apiBaseUrl + '/files/' + id + '/download', {
+			method: 'GET',
+			headers: {
+				Authorization: 'Bearer ' + FilesService.user.access_token,
+			},
+		});
+
+		const blob = await res.blob();
+		return blob;
+	}
+
 	public async getAllMineFiles(): Promise<UserFile[]> {
 		const res = await fetch(config.apiBaseUrl + '/files/mine', {
 			method: 'GET',

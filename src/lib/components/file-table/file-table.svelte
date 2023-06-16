@@ -5,10 +5,12 @@
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import FileUploader from '../file-uploader/file-uploader.svelte';
 	import FileTools from '../file-tools/file-tools.svelte';
-	import { modalStore } from '@skeletonlabs/skeleton';
+	import { modalStore, type ModalSettings, type ModalComponent } from '@skeletonlabs/skeleton';
 	import FolderOff from 'carbon-icons-svelte/lib/FolderOff.svelte';
 	import type { Album } from '$lib/interfaces/album.interface';
 	import { AlbumsService } from '$lib/services/albums.service';
+	import Search from 'carbon-icons-svelte/lib/Search.svelte';
+	import ImagePreview from '../image-preview/image-preview.svelte';
 
 	export let files: File[] = [];
 	export let album: Album | null = null;
@@ -74,6 +76,18 @@
 		}
 		files = [...files, event.detail];
 	};
+
+	const openModalPreview = (file: File) => {
+		const modalComponent: ModalComponent = {
+			ref: ImagePreview,
+			props: { file },
+		};
+		const modal: ModalSettings = {
+			type: 'component',
+			component: modalComponent,
+		};
+		modalStore.trigger(modal);
+	};
 </script>
 
 <div class="table-container w-full p-4 sm:p-0">
@@ -108,6 +122,12 @@
 					<td class="hidden md:table-cell">{formatDate(row.created)}</td>
 					<td>
 						<div class="flex justify-center items-center gap-2 w-min sm:w-full">
+							<button
+								on:click|stopPropagation|preventDefault={() => openModalPreview(row)}
+								class="text-tertiary-500 hover:text-primary-500"
+							>
+								<Search size={24} />
+							</button>
 							<button
 								on:click|preventDefault={() => {
 									filesService.downloadFile(row.id, row.originalName);
