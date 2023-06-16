@@ -1,4 +1,4 @@
-<div class="w-full">
+<div class="w-full" {...$$restProps}>
 	<label class="label">
 		<div>
 			<slot name="label" />

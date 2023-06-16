@@ -78,9 +78,9 @@
 							goto('/app/albums/' + album.id);
 						}}
 						href="/app/albums/{album.id}"
-						class="text-primary-500 w-full"
+						class="text-primary-500 flex-1 max-w-full"
 					>
-						{album.title}
+						<span class="overflow-hidden whitespace-nowrap overflow-ellipsis"> {album.title} </span>
 					</a>
 				</li>
 			{/each}
