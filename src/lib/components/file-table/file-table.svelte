@@ -12,6 +12,7 @@
 	import Search from 'carbon-icons-svelte/lib/Search.svelte';
 	import ImagePreview from '../image-preview/image-preview.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import CheckboxChecked from 'carbon-icons-svelte/lib/CheckboxChecked.svelte';
 
 	export let files: File[] = [];
 	export let album: Album | null = null;
@@ -28,6 +29,14 @@
 		} else {
 			checkedRows = [...checkedRows, id];
 		}
+	};
+
+	const selectAll = () => {
+		checkedRows = files.map((row) => row.id);
+	};
+
+	const selectNone = () => {
+		checkedRows = [];
 	};
 
 	const albumUpdate = (event: CustomEvent<Album>) => {
@@ -95,7 +104,13 @@
 </script>
 
 <div class="table-container w-full">
-	<FileTools {checkedRows} on:albumUpdate={albumUpdate} albumId={album ? album.id : null} />
+	<FileTools
+		{checkedRows}
+		on:albumUpdate={albumUpdate}
+		albumId={album ? album.id : null}
+		on:selectAll={selectAll}
+		on:selectNone={selectNone}
+	/>
 	<table class="table variant-ghost table-hover table-interactive w-full">
 		<thead>
 			<tr>

@@ -6,6 +6,9 @@
 	import FolderAdd from 'carbon-icons-svelte/lib/FolderAdd.svelte';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import FolderOff from 'carbon-icons-svelte/lib/FolderOff.svelte';
+	import Checkbox from 'carbon-icons-svelte/lib/Checkbox.svelte';
+	import CheckboxChecked from 'carbon-icons-svelte/lib/CheckboxChecked.svelte';
+	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import { FilesService } from '$lib/services/files.service';
 
 	export let checkedRows: number[] = [];
@@ -26,6 +29,14 @@
 	onMount(async () => {
 		albums = await albumsService.getMyAlbums();
 	});
+
+	const selectAll = () => {
+		dispatch('selectAll');
+	};
+
+	const selectNone = () => {
+		dispatch('selectNone');
+	};
 
 	const addFilesToAlbum = async (albumId: number) => {
 		try {
@@ -85,6 +96,18 @@
 	<div class="w-full flex gap-4 flex-wrap">
 		<button
 			class="btn btn-primary variant-filled-secondary w-full md:w-auto"
+			on:click={() => selectAll()}
+		>
+			<CheckboxChecked size={24} /> <span>Select All</span>
+		</button>
+		<button
+			class="btn btn-primary variant-filled-secondary w-full md:w-auto"
+			on:click={() => selectNone()}
+		>
+			<Checkbox size={24} /> <span>Select None</span>
+		</button>
+		<button
+			class="btn btn-primary variant-filled-secondary w-full md:w-auto"
 			use:popup={popupCombobox}
 		>
 			<FolderAdd size={24} /> <span>Add to album</span>
@@ -116,7 +139,7 @@
 			class="btn btn-primary variant-filled-secondary w-full md:w-auto"
 			on:click={() => deleteFiles(albumId)}
 		>
-			<FolderOff size={24} /> <span>Remove files</span>
+			<TrashCan size={24} /> <span>Remove files</span>
 		</button>
 	</div>
 	<!-- <div class="card variant-ghost px-4">d</div> -->
