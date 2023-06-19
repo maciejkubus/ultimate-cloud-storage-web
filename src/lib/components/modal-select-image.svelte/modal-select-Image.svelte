@@ -24,7 +24,11 @@
 			console.error(error);
 		}
 
-		if ($modalStore[0].response) $modalStore[0].response(selected);
+		if ($modalStore[0].response)
+			$modalStore[0].response({
+				selected,
+				albumId,
+			});
 		modalStore.close();
 	};
 </script>

@@ -11,15 +11,18 @@
 	import { goto } from '$app/navigation';
 	import Image from 'carbon-icons-svelte/lib/Image.svelte';
 	import ModalSelectImage from '../modal-select-image.svelte/modal-select-Image.svelte';
+	import FilePreview from '../file-preview/file-preview.svelte';
 
 	const albumsService = AlbumsService.getInstance();
 	let albums: Album[] = [];
+	let loaded = false;
 
-	onMount(() => {
-		albumsService.getMyAlbums();
+	onMount(async () => {
+		albums = await albumsService.getMyAlbums();
 		albumStore.subscribe((value) => {
 			albums = value.albums;
 		});
+		loaded = true;
 	});
 
 	const formatDate = (dateString: string) => {
@@ -97,10 +100,10 @@
 		const modal: ModalSettings = {
 			type: 'component',
 			component: modalComponent,
-			response: (response: any) => {
+			response: async (response: any) => {
 				const changedAlbum = albums.find((album) => album.id === response.albumId);
 				if (!changedAlbum) return;
-				albumsService.getMyAlbums();
+				albums = await albumsService.getMyAlbums();
 			},
 		};
 		modalStore.trigger(modal);
@@ -115,18 +118,27 @@
 		</button>
 	</div>
 	<div>
-		{#if albums.length > 0}
+		{#if loaded && albums.length > 0}
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
 				{#each albums as album}
 					<a
 						href="/app/albums/{album.id}"
-						class="card variant-glass-tertiary cursor-pointer text-primary-500"
+						class="card variant-glass-tertiary cursor-pointer text-primary-500 relative overflow-hidden flex flex-col"
 						on:click={() => goto('/app/albums/' + album.id)}
 					>
+						{#if album.thumbnail}
+							<div class="absolute -z-10 inset-0 pointer-events-none opacity-30 flex">
+								<FilePreview
+									file={album.thumbnail}
+									imageClass="object-cover flex-1"
+									containerClass="flex justify-center items-center"
+								/>
+							</div>
+						{/if}
 						<header class="card-header">
 							<h3 class="h3">{album.title}</h3>
 						</header>
-						<div class="card-body p-4">
+						<div class="card-body p-4 flex-1">
 							<div class="text-sm">
 								<span class="font-bold"> Updated: </span>
 								<span> {formatDate(album.updated)} </span>

@@ -8,4 +8,5 @@ export interface Album {
 	title: string;
 	user: User;
 	files: File[];
+	thumbnail?: File;
 }
