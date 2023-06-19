@@ -95,22 +95,22 @@
 <div class="w-full flex justify-between pb-8">
 	<div class="w-full flex gap-4 flex-wrap">
 		<button
-			class="btn btn-primary variant-filled-secondary w-full md:w-auto"
+			class="btn btn-primary variant-filled-secondary w-full md:w-auto text-sm"
 			on:click={() => selectAll()}
 		>
-			<CheckboxChecked size={24} /> <span>Select All</span>
+			<CheckboxChecked size={20} /> <span>Select All</span>
 		</button>
 		<button
-			class="btn btn-primary variant-filled-secondary w-full md:w-auto"
+			class="btn btn-primary variant-filled-secondary w-full md:w-auto text-sm"
 			on:click={() => selectNone()}
 		>
-			<Checkbox size={24} /> <span>Select None</span>
+			<Checkbox size={20} /> <span>Select None</span>
 		</button>
 		<button
-			class="btn btn-primary variant-filled-secondary w-full md:w-auto"
+			class="btn btn-primary variant-filled-secondary w-full md:w-auto text-sm"
 			use:popup={popupCombobox}
 		>
-			<FolderAdd size={24} /> <span>Add to album</span>
+			<FolderAdd size={20} /> <span>Add to album</span>
 		</button>
 		<div class="card w-48 shadow-xl py-2 overflow-hidden" data-popup="popupCombobox">
 			<ul class="list py-2 max-h-48 overflow-y-scroll">
@@ -129,17 +129,17 @@
 
 		{#if albumId}
 			<button
-				class="btn btn-primary variant-filled-secondary w-full md:w-auto"
+				class="btn btn-primary variant-filled-secondary w-full md:w-auto text-sm"
 				on:click={() => (albumId ? removeFilesFromAlbum(albumId) : null)}
 			>
-				<FolderOff size={24} /> <span>Remove from album</span>
+				<FolderOff size={20} /> <span>Remove from album</span>
 			</button>
 		{/if}
 		<button
-			class="btn btn-primary variant-filled-secondary w-full md:w-auto"
+			class="btn btn-primary variant-filled-secondary w-full md:w-auto text-sm"
 			on:click={() => deleteFiles(albumId)}
 		>
-			<TrashCan size={24} /> <span>Remove files</span>
+			<TrashCan size={20} /> <span>Remove files</span>
 		</button>
 	</div>
 	<!-- <div class="card variant-ghost px-4">d</div> -->
