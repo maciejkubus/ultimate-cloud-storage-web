@@ -10,9 +10,8 @@
 	import type { Album } from '$lib/interfaces/album.interface';
 	import { AlbumsService } from '$lib/services/albums.service';
 	import Search from 'carbon-icons-svelte/lib/Search.svelte';
-	import ImagePreview from '../image-preview/image-preview.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import CheckboxChecked from 'carbon-icons-svelte/lib/CheckboxChecked.svelte';
+	import FilePreview from '../file-preview/file-preview.svelte';
 
 	export let files: File[] = [];
 	export let album: Album | null = null;
@@ -90,10 +89,20 @@
 		files = [...files, event.detail];
 	};
 
+	/*
+  imageClass="max-w-screen max-h-screen p-8 pointer-events-none"
+	videoClass="max-w-screen max-h-screen p-8"
+	noPreviewClass="max-w-screen max-h-screen p-8"
+  */
 	const openModalPreview = (file: File) => {
 		const modalComponent: ModalComponent = {
-			ref: ImagePreview,
-			props: { file },
+			ref: FilePreview,
+			props: {
+				file,
+				imageClass: 'max-w-screen max-h-screen p-8 pointer-events-none',
+				videoClass: 'max-w-screen max-h-screen p-8',
+				noPreviewClass: 'max-w-screen max-h-screen p-8',
+			},
 		};
 		const modal: ModalSettings = {
 			type: 'component',
