@@ -1,17 +1,19 @@
 <script lang="ts">
-	import { toastStore } from '@skeletonlabs/skeleton';
+	import { modalStore, toastStore } from '@skeletonlabs/skeleton';
 	import type { Album } from '$lib/interfaces/album.interface';
 	import { AlbumsService } from '$lib/services/albums.service';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 	import FolderAdd from 'carbon-icons-svelte/lib/FolderAdd.svelte';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import FolderOff from 'carbon-icons-svelte/lib/FolderOff.svelte';
+	import { FilesService } from '$lib/services/files.service';
 
 	export let checkedRows: number[] = [];
 	export let albumId: number | null = null;
 
 	const dispatch = createEventDispatcher();
 	const albumsService = AlbumsService.getInstance();
+	const filesService = FilesService.getInstance();
 	let albums: Album[] = [];
 
 	const popupCombobox: PopupSettings = {
@@ -53,6 +55,30 @@
 			});
 		}
 	};
+	const deleteFiles = async (albumId: number | null) => {
+		modalStore.trigger({
+			type: 'confirm',
+			title: 'Remove files',
+			body: 'Remove files?',
+			response: async (response: boolean) => {
+				if (!response) return;
+				const success = await filesService.deleteFiles(checkedRows);
+				if (!success) {
+					toastStore.trigger({
+						message: 'Error removing files',
+						background: 'variant-filled-error',
+					});
+				}
+				if (albumId) {
+					const album = await albumsService.getAlbum(albumId);
+					await toastStore.trigger({
+						message: 'Files removed from album successfully',
+					});
+					dispatch('albumUpdate', album);
+				}
+			},
+		});
+	};
 </script>
 
 <div class="w-full flex justify-between pb-8">
@@ -86,6 +112,12 @@
 				<FolderOff size={24} /> <span>Remove from album</span>
 			</button>
 		{/if}
+		<button
+			class="btn btn-primary variant-filled-secondary w-full md:w-auto"
+			on:click={() => deleteFiles(albumId)}
+		>
+			<FolderOff size={24} /> <span>Remove files</span>
+		</button>
 	</div>
 	<!-- <div class="card variant-ghost px-4">d</div> -->
 </div>

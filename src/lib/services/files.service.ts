@@ -75,6 +75,14 @@ export class FilesService {
 		return true;
 	}
 
+	public async deleteFiles(ids: number[]): Promise<boolean> {
+		for (const id of ids) {
+			const fileDeleted = await this.deleteFile(id);
+			if (!fileDeleted) return false;
+		}
+		return true;
+	}
+
 	public async uploadFile(file: File): Promise<UserFile> {
 		const formData = new FormData();
 		formData.append('file', file);
