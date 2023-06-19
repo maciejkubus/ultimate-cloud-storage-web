@@ -3,12 +3,14 @@
 	import { albumStore } from '$lib/stores/album.store';
 	import { onMount } from 'svelte';
 	import Add from 'carbon-icons-svelte/lib/Add.svelte';
-	import { modalStore } from '@skeletonlabs/skeleton';
+	import { modalStore, type ModalComponent, type ModalSettings } from '@skeletonlabs/skeleton';
 	import { AlbumsService } from '$lib/services/albums.service';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import Pen from 'carbon-icons-svelte/lib/Pen.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import { goto } from '$app/navigation';
+	import Image from 'carbon-icons-svelte/lib/Image.svelte';
+	import ModalSelectImage from '../modal-select-image.svelte/modal-select-Image.svelte';
 
 	const albumsService = AlbumsService.getInstance();
 	let albums: Album[] = [];
@@ -79,6 +81,30 @@
 			},
 		});
 	};
+
+	const openModalSetThumbnail = async (album: Album) => {
+		const fetchedAlbum = await albumsService.getAlbum(album.id);
+		const files = fetchedAlbum.files;
+		const images = files.filter((file) => file.mimetype.includes('image'));
+		const modalComponent: ModalComponent = {
+			ref: ModalSelectImage,
+			props: {
+				images,
+				title: 'Select thumbnail',
+				albumId: album.id,
+			},
+		};
+		const modal: ModalSettings = {
+			type: 'component',
+			component: modalComponent,
+			response: (response: any) => {
+				const changedAlbum = albums.find((album) => album.id === response.albumId);
+				if (!changedAlbum) return;
+				albumsService.getMyAlbums();
+			},
+		};
+		modalStore.trigger(modal);
+	};
 </script>
 
 <div>
@@ -120,7 +146,13 @@
 								</button>
 								<button
 									class="hover:text-tertiary-500"
-									on:click|preventDefault={() => openModalEditAlbum(album)}
+									on:click|stopPropagation|preventDefault={() => openModalSetThumbnail(album)}
+								>
+									<Image size={24} />
+								</button>
+								<button
+									class="hover:text-tertiary-500"
+									on:click|stopPropagation|preventDefault={() => openModalEditAlbum(album)}
 								>
 									<Pen size={24} />
 								</button>

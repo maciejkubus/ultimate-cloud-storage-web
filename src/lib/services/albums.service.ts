@@ -136,4 +136,25 @@ export class AlbumsService {
 			});
 		}
 	}
+
+	public async setThumbnail(albumId: number, fileId: number): Promise<Album> {
+		const res = await fetch(config.apiBaseUrl + '/albums/' + albumId + '/thumbnail', {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + AlbumsService.userStore.access_token,
+			},
+			body: JSON.stringify({ fileId }),
+		});
+
+		const updatedAlbum = await res.json();
+
+		const albums = AlbumsService.albumStore.albums;
+		albums[albums.findIndex((a) => a.id === updatedAlbum.id)] = updatedAlbum;
+		albumStore.set({
+			albums,
+		});
+
+		return updatedAlbum;
+	}
 }

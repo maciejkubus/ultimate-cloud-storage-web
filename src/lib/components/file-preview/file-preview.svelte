@@ -14,6 +14,7 @@
 	let type: FileType = FileType.FILE;
 	let src = '';
 	let alt = '';
+	let loaded = false;
 
 	onMount(async () => {
 		if (!file) return;
@@ -22,10 +23,11 @@
 		type = accesibleFile.type;
 		src = accesibleFile.src;
 		alt = accesibleFile.alt;
+		loaded = true;
 	});
 </script>
 
-{#if file}
+{#if file && loaded}
 	<div class={containerClass}>
 		{#if type === FileType.IMAGE}
 			<img {src} {alt} class={imageClass} />
