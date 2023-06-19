@@ -88,6 +88,17 @@ export class AlbumsService {
 		});
 		return await res.json();
 	}
+	public async removeFilesFromAlbum(albumId: number, fileIds: number[]): Promise<Album> {
+		const res = await fetch(config.apiBaseUrl + '/albums/' + albumId + '/remove', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + AlbumsService.userStore.access_token,
+			},
+			body: JSON.stringify({ files: fileIds }),
+		});
+		return await res.json();
+	}
 
 	public async editAlbum(album: AlbumEdit): Promise<Album> {
 		const res = await fetch(config.apiBaseUrl + '/albums/' + album.id, {

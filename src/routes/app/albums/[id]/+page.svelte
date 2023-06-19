@@ -29,6 +29,11 @@
 	};
 
 	afterNavigate(loadAlbum);
+
+	const albumUpdate = (event: CustomEvent) => {
+		album = event.detail;
+		files = album?.files || [];
+	};
 </script>
 
 <svelte:head>
@@ -36,5 +41,5 @@
 </svelte:head>
 
 {#if loaded}
-	<FileTable {files} {album} />
+	<FileTable {files} {album} on:albumUpdate={albumUpdate} />
 {/if}

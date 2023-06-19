@@ -11,9 +11,12 @@
 	import { AlbumsService } from '$lib/services/albums.service';
 	import Search from 'carbon-icons-svelte/lib/Search.svelte';
 	import ImagePreview from '../image-preview/image-preview.svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	export let files: File[] = [];
 	export let album: Album | null = null;
+
+	const dispatch = createEventDispatcher();
 
 	const albumsService = AlbumsService.getInstance();
 	const filesService = FilesService.getInstance();
@@ -27,8 +30,9 @@
 		}
 	};
 
-	const clearRows = () => {
+	const albumUpdate = (event: CustomEvent<Album>) => {
 		checkedRows = [];
+		dispatch('albumUpdate', event.detail);
 	};
 
 	const formatDate = (dateString: string) => {
@@ -90,8 +94,8 @@
 	};
 </script>
 
-<div class="table-container w-full p-4 sm:p-0">
-	<FileTools {checkedRows} on:addedToAlbum={clearRows} />
+<div class="table-container w-full">
+	<FileTools {checkedRows} on:albumUpdate={albumUpdate} albumId={album ? album.id : null} />
 	<table class="table variant-ghost table-hover table-interactive w-full">
 		<thead>
 			<tr>
@@ -113,7 +117,7 @@
 				>
 					<td class="font-bold text-center hidden sm:table-cell">{row.id}</td>
 					<td
-						class="overflow-hidden text-ellipsis whitespace-nowrap w-[120px] max-w-[120px] sm:max-w-sm"
+						class="overflow-hidden text-ellipsis whitespace-nowrap w-[100px] max-w-[100px] sm:max-w-sm"
 					>
 						{row.originalName}
 					</td>
