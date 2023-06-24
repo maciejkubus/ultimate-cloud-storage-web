@@ -3,6 +3,7 @@ import type { AlbumCreate } from '$lib/interfaces/album-create.interface';
 import type { AlbumEdit } from '$lib/interfaces/album-edit.interface';
 import type { AlbumStore } from '$lib/interfaces/album-store.interface';
 import type { Album } from '$lib/interfaces/album.interface';
+import type { PaginatedResponse } from '$lib/interfaces/paginated-response.interdace';
 import type { UserStore } from '$lib/interfaces/user-store.interface';
 import { albumStore } from '$lib/stores/album.store';
 import { userStore } from '$lib/stores/user.store';
@@ -57,24 +58,20 @@ export class AlbumsService {
 		return await res.json();
 	}
 
-	public async loadMineAlbums(): Promise<Album[]> {
-		const res = await fetch(config.apiBaseUrl + '/albums/mine', {
+	public async getMyAlbums(page: number): Promise<PaginatedResponse<Album[]>> {
+		const res = await fetch(config.apiBaseUrl + '/albums/mine?page=' + page, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
 				Authorization: 'Bearer ' + AlbumsService.userStore.access_token,
 			},
 		});
-		const albums = await res.json();
+		const body = await res.json();
+    const albums = body.data;
 		albumStore.set({
 			albums,
 		});
-		return albums;
-	}
-
-	public async getMyAlbums(): Promise<Album[]> {
-		await this.loadMineAlbums();
-		return AlbumsService.albumStore.albums;
+		return body;
 	}
 
 	public async addFilesToAlbum(albumId: number, fileIds: number[]): Promise<Album> {

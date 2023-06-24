@@ -12,18 +12,42 @@
 	import Image from 'carbon-icons-svelte/lib/Image.svelte';
 	import ModalSelectImage from '../modal-select-image.svelte/modal-select-Image.svelte';
 	import FilePreview from '../file-preview/file-preview.svelte';
+	import type { Paginated } from '$lib/interfaces/paginated.interface';
+	import PaginationBar from '../pagination-bar/pagination-bar.svelte';
 
 	const albumsService = AlbumsService.getInstance();
+	let paginationData: Paginated = {
+		page: 1,
+		totalPages: 15,
+		lastPage: 23,
+	};
 	let albums: Album[] = [];
 	let loaded = false;
 
+	const getAlbums = async () => {
+		const response = await albumsService.getMyAlbums(paginationData.page);
+		paginationData = {
+			page: response.meta.currentPage,
+			totalPages: response.meta.totalPages,
+			lastPage: response.meta.totalPages,
+		};
+		return response.data;
+	};
+
 	onMount(async () => {
-		albums = await albumsService.getMyAlbums();
+		albums = await getAlbums();
 		albumStore.subscribe((value) => {
 			albums = value.albums;
 		});
 		loaded = true;
 	});
+
+	const pageChange = async (event: CustomEvent<Paginated>) => {
+		loaded = false;
+		paginationData = event.detail;
+		albums = await getAlbums();
+		loaded = true;
+	};
 
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString).toLocaleDateString();
@@ -103,7 +127,7 @@
 			response: async (response: any) => {
 				const changedAlbum = albums.find((album) => album.id === response.albumId);
 				if (!changedAlbum) return;
-				albums = await albumsService.getMyAlbums();
+				albums = await getAlbums();
 			},
 		};
 		modalStore.trigger(modal);
@@ -117,7 +141,7 @@
 			<span>Add album</span>
 		</button>
 	</div>
-	<div>
+	<div class="pb-8">
 		{#if loaded && albums.length > 0}
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
 				{#each albums as album}
@@ -177,6 +201,10 @@
 						</footer>
 					</a>
 				{/each}
+			</div>
+
+			<div class="mt-8">
+				<PaginationBar data={paginationData} on:change={pageChange} />
 			</div>
 		{:else}
 			<div class="card px-4 py-8 variant-ringed-surface text-center space-y-4">

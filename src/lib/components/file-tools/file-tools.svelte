@@ -27,7 +27,8 @@
 	};
 
 	onMount(async () => {
-		albums = await albumsService.getMyAlbums();
+		const response = await albumsService.getMyAlbums(1);
+		albums = response.data;
 	});
 
 	const selectAll = () => {
@@ -114,15 +115,14 @@
 		</button>
 		<div class="card w-48 shadow-xl py-2 overflow-hidden" data-popup="popupCombobox">
 			<ul class="list py-2 max-h-48 overflow-y-scroll">
-				{#each albums as album}
-					<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<!-- {#each albums as album}
 					<li
 						class="px-4 py-2 rounded-none hover:variant-soft-tertiary hover:rounded-none cursor-pointer close"
 						on:click={() => addFilesToAlbum(album.id)}
 					>
 						{album.title}
 					</li>
-				{/each}
+				{/each} -->
 			</ul>
 			<div class="arrow bg-surface-100-800-token" />
 		</div>

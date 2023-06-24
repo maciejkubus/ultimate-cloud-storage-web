@@ -1,3 +1,7 @@
+@tailwind base;@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
 html,
 body {
 	@apply h-full;
@@ -11,4 +15,12 @@ body {
 
 a {
 	@apply text-tertiary-500;
+}
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
