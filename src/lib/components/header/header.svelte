@@ -5,6 +5,7 @@
 	import Logout from 'carbon-icons-svelte/lib/Logout.svelte';
 	import Settings from 'carbon-icons-svelte/lib/Settings.svelte';
 	import { goto } from '$app/navigation';
+	import { logout } from '$lib/utils/logout';
 
 	const drawerSettings: DrawerSettings = {
 		id: 'menu',
@@ -18,12 +19,6 @@
 
 	const openDrawer = () => {
 		drawerStore.open(drawerSettings);
-	};
-
-	const logout = () => {
-		localStorage.clear();
-		sessionStorage.clear();
-		window.location.href = '/';
 	};
 </script>
 

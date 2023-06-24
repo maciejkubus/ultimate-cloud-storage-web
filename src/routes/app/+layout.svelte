@@ -8,6 +8,7 @@
 	import DrawerLeft from '$lib/components/drawer-left/drawer-left.svelte';
 	import type { PageMetadataStore } from '$lib/interfaces/page-metadata.inerface';
 	import { pageMetadataStore } from '$lib/stores/page-metadata.store';
+	import { UserService } from '$lib/services/user.service';
 
 	$: positionClasses = $drawerStore.open ? 'scale-[120%]' : '';
 
@@ -26,7 +27,12 @@
 	});
 
 	onMount(() => {
-		if (browser && !user.loggedIn) {
+		if (!browser) return;
+
+		if (user.loggedIn) {
+			const userServices = UserService.getInstance();
+			console.log(user, userServices.getMe());
+		} else {
 			window.location.href = '/auth/login';
 		}
 	});

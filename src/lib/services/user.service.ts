@@ -2,6 +2,7 @@ import { config } from '$lib/config';
 import type { UserStore } from '$lib/interfaces/user-store.interface';
 import type { User } from '$lib/interfaces/user.interface';
 import { userStore } from '$lib/stores/user.store';
+import { logout } from '$lib/utils/logout';
 
 export class UserService {
 	private static instance: UserService;
@@ -19,6 +20,23 @@ export class UserService {
 		}
 		return UserService.instance;
 	}
+
+  public async getMe() {
+    //http://localhost:3000/api/v1/users/me
+    const res = await fetch(config.apiBaseUrl + '/users/me', {
+			method: 'GET',
+			headers: {
+				Authorization: 'Bearer ' + UserService.userStore.access_token,
+			},
+		});
+
+    if(res.status === 401) {
+      logout();
+    }
+
+    const body = await res.json();
+		return body;
+  }
 
 	public async changePassword(
 		userId: string,
