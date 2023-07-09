@@ -10,7 +10,7 @@
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import { goto } from '$app/navigation';
 	import Image from 'carbon-icons-svelte/lib/Image.svelte';
-	import ModalSelectImage from '../modal-select-image.svelte/modal-select-Image.svelte';
+	import ModalSelectImage from '../modal-select-image/modal-select-Image.svelte';
 	import FilePreview from '../file-preview/file-preview.svelte';
 	import type { Paginated } from '$lib/interfaces/paginated.interface';
 	import PaginationBar from '../pagination-bar/pagination-bar.svelte';
@@ -18,8 +18,8 @@
 	const albumsService = AlbumsService.getInstance();
 	let paginationData: Paginated = {
 		page: 1,
-		totalPages: 15,
-		lastPage: 23,
+		totalPages: 1,
+		lastPage: 1,
 	};
 	let albums: Album[] = [];
 	let loaded = false;
@@ -110,14 +110,9 @@
 	};
 
 	const openModalSetThumbnail = async (album: Album) => {
-		const fetchedAlbum = await albumsService.getAlbum(album.id);
-		const files = fetchedAlbum.files;
-		const images = files.filter((file) => file.mimetype.includes('image'));
 		const modalComponent: ModalComponent = {
 			ref: ModalSelectImage,
 			props: {
-				images,
-				title: 'Select thumbnail',
 				albumId: album.id,
 			},
 		};
@@ -125,8 +120,8 @@
 			type: 'component',
 			component: modalComponent,
 			response: async (response: any) => {
-				const changedAlbum = albums.find((album) => album.id === response.albumId);
-				if (!changedAlbum) return;
+				if (!response) return;
+				albums = [];
 				albums = await getAlbums();
 			},
 		};

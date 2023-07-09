@@ -1,5 +1,6 @@
 import { config } from '$lib/config';
 import type { File as UserFile } from '$lib/interfaces/file.interface';
+import type { PaginatedResponse } from '$lib/interfaces/paginated-response.interdace';
 import type { UserStore } from '$lib/interfaces/user-store.interface';
 import { userStore } from '$lib/stores/user.store';
 
@@ -50,7 +51,7 @@ export class FilesService {
 		return blob;
 	}
 
-	public async getAllMineFiles(): Promise<UserFile[]> {
+	public async getAllMineFiles(): Promise<PaginatedResponse<UserFile[]>> {
 		const res = await fetch(config.apiBaseUrl + '/files/mine', {
 			method: 'GET',
 			headers: {
@@ -60,6 +61,18 @@ export class FilesService {
 		});
 		const files = await res.json();
 		return files;
+	}
+
+  public async getFilesByAlbumId(albumId: number, page = 0): Promise<PaginatedResponse<UserFile[]>> {
+		const res = await fetch(config.apiBaseUrl + '/files/mine?page=' + page + '&filter.album.id=$eq:' + albumId, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + FilesService.user.access_token,
+			},
+		});
+		const body = await res.json();
+		return body;
 	}
 
 	public async deleteFile(id: number): Promise<boolean> {
