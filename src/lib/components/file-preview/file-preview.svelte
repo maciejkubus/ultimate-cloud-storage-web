@@ -37,8 +37,6 @@
 			</video>
 		{:else if type === FileType.AUDIO}
 			<audio {src} class={audioClass} controls />
-		{:else if $$slots.default}
-			<slot />
 		{:else}
 			<div class="flex flex-col items-center justify-center {noPreviewClass}">
 				<div class="flex items-center justify-center">
