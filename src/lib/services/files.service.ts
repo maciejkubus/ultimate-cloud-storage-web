@@ -51,8 +51,8 @@ export class FilesService {
 		return blob;
 	}
 
-	public async getAllMineFiles(): Promise<PaginatedResponse<UserFile[]>> {
-		const res = await fetch(config.apiBaseUrl + '/files/mine', {
+	public async getAllMineFiles(page: number): Promise<PaginatedResponse<UserFile[]>> {
+		const res = await fetch(config.apiBaseUrl + '/files/mine?page=' + page, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
