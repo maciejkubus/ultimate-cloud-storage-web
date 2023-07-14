@@ -61,6 +61,7 @@
 	const albumUpdate = (event: CustomEvent) => {
 		album = event.detail;
 		files = album?.files || [];
+		loadAlbum();
 	};
 </script>
 
