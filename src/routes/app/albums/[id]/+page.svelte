@@ -49,7 +49,14 @@
 		}
 	};
 
-	afterNavigate(loadAlbum);
+	afterNavigate(() => {
+		paginationData = {
+			page: 1,
+			totalPages: 1,
+			lastPage: 1,
+		};
+		loadAlbum();
+	});
 
 	const albumUpdate = (event: CustomEvent) => {
 		album = event.detail;

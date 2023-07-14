@@ -10,6 +10,7 @@
 	import CheckboxChecked from 'carbon-icons-svelte/lib/CheckboxChecked.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import { FilesService } from '$lib/services/files.service';
+	import FormInput from '../form-input/form-input.svelte';
 
 	export let checkedRows: number[] = [];
 	export let albumId: number | null = null;
@@ -18,6 +19,7 @@
 	const albumsService = AlbumsService.getInstance();
 	const filesService = FilesService.getInstance();
 	let albums: Album[] = [];
+	let albumSearch = '';
 
 	const popupCombobox: PopupSettings = {
 		event: 'focus-click',
@@ -26,17 +28,17 @@
 		closeQuery: '.close',
 	};
 
-	onMount(async () => {
-		const response = await albumsService.getMyAlbums(1);
-		albums = response.data;
-	});
-
 	const selectAll = () => {
 		dispatch('selectAll');
 	};
 
 	const selectNone = () => {
 		dispatch('selectNone');
+	};
+
+	const loadAlbums = async () => {
+		const response = await albumsService.getAlbumsSW(albumSearch);
+		albums = response.data;
 	};
 
 	const addFilesToAlbum = async (albumId: number) => {
@@ -114,16 +116,30 @@
 			<FolderAdd size={20} /> <span>Add to album</span>
 		</button>
 		<div class="card w-48 shadow-xl py-2 overflow-hidden" data-popup="popupCombobox">
-			<ul class="list py-2 max-h-48 overflow-y-scroll">
-				<!-- {#each albums as album}
-					<li
-						class="px-4 py-2 rounded-none hover:variant-soft-tertiary hover:rounded-none cursor-pointer close"
-						on:click={() => addFilesToAlbum(album.id)}
-					>
-						{album.title}
-					</li>
-				{/each} -->
-			</ul>
+			<div class="px-4 py-2 w-full">
+				<input
+					type="text"
+					class="w-full text-xs text-primary-500 bg-transparent rounded-md"
+					placeholder="Search..."
+					bind:value={albumSearch}
+					on:keydown={loadAlbums}
+				/>
+			</div>
+			{#if albums.length > 0}
+				<ul class="list py-2 max-h-48 overflow-y-scroll">
+					{#each albums as album}
+						<li
+							class="px-4 py-2 rounded-none hover:variant-soft-tertiary hover:rounded-none cursor-pointer close"
+						>
+							<button on:click={() => addFilesToAlbum(album.id)}>
+								{album.title}
+							</button>
+						</li>
+					{/each}
+				</ul>
+			{:else}
+				<div class="px-4 py-2">No albums</div>
+			{/if}
 			<div class="arrow bg-surface-100-800-token" />
 		</div>
 

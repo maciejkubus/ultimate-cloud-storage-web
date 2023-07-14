@@ -74,6 +74,18 @@ export class AlbumsService {
 		return body;
 	}
 
+  public async getAlbumsSW(name: string): Promise<PaginatedResponse<Album[]>> {
+    const res = await fetch(config.apiBaseUrl + '/albums/mine?filter.title=$sw:' + name, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + AlbumsService.userStore.access_token,
+			},
+		});
+		const body = await res.json();
+		return body;
+  }
+
 	public async addFilesToAlbum(albumId: number, fileIds: number[]): Promise<Album> {
 		const res = await fetch(config.apiBaseUrl + '/albums/' + albumId + '/add', {
 			method: 'POST',
