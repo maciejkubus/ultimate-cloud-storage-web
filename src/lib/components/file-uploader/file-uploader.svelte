@@ -13,21 +13,22 @@
 	const fileChange = async (event: any) => {
 		if (uploading) return;
 
-		const tempFile = event?.target?.files[0];
-		if (!tempFile) return;
+		const tempFiles = event?.target?.files;
 
 		uploading = true;
-		try {
-			const uploadedFile = await filesService.uploadFile(tempFile);
-			toastStore.trigger({
-				message: 'Your file has been uploaded successfully',
-			});
-			dispatch('uploaded', uploadedFile);
-		} catch (error) {
-			toastStore.trigger({
-				message: error + '',
-				background: 'variant-filled-error',
-			});
+		for (const tempFile of tempFiles) {
+			try {
+				const uploadedFile = await filesService.uploadFile(tempFile);
+				toastStore.trigger({
+					message: `File ${tempFile.name} has been uploaded successfully`,
+				});
+				dispatch('uploaded', uploadedFile);
+			} catch (error) {
+				toastStore.trigger({
+					message: error + '',
+					background: 'variant-filled-error',
+				});
+			}
 		}
 		uploading = false;
 	};
@@ -37,7 +38,7 @@
 
 <div class="flex">
 	<form class="contents" on:submit|preventDefault={submit} enctype="multipart/form-data">
-		<FileDropzone name="files" on:change={fileChange} bind:files>
+		<FileDropzone name="files" on:change={fileChange} bind:files multiple>
 			<svelte:fragment slot="lead" />
 			<svelte:fragment slot="message">
 				{#if uploading}
