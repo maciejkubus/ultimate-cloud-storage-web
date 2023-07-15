@@ -1,19 +1,7 @@
 <script lang="ts">
-	import type { Album } from '$lib/interfaces/album.interface';
-	import { albumStore } from '$lib/stores/album.store';
-	import { onMount } from 'svelte';
 	import Star from 'carbon-icons-svelte/lib/Star.svelte';
-	import ImageCopy from 'carbon-icons-svelte/lib/ImageCopy.svelte';
 	import { drawerStore } from '@skeletonlabs/skeleton';
 	import { goto } from '$app/navigation';
-
-	let albums: Album[] = [];
-
-	onMount(() => {
-		albumStore.subscribe((value) => {
-			albums = value.albums;
-		});
-	});
 </script>
 
 <div class="p-4 h-full card flex flex-col">
@@ -62,28 +50,6 @@
 					Albums
 				</a>
 			</li>
-		</ul>
-		<div class="p-4 pl-2 text-sm text-primary-500 flex gap-1 font-bold">
-			<span class="text-tertiary-500">
-				<ImageCopy size={20} />
-			</span>
-			<span> Albums </span>
-		</div>
-		<ul class="list list-nav">
-			{#each albums as album}
-				<li class="w-full flex items-stretch justify-stretch pr-4">
-					<a
-						on:click|preventDefault={() => {
-							drawerStore.close();
-							goto('/app/albums/' + album.id);
-						}}
-						href="/app/albums/{album.id}"
-						class="text-primary-500 flex-1 max-w-full"
-					>
-						<span class="overflow-hidden whitespace-nowrap overflow-ellipsis"> {album.title} </span>
-					</a>
-				</li>
-			{/each}
 		</ul>
 	</section>
 	<footer class="card-footer text-sm text-center">
