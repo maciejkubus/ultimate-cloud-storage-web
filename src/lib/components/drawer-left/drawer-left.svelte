@@ -71,33 +71,35 @@
 				</li>
 			{/each}
 		</ul>
-		<div class="p-4 pl-2 text-sm text-primary-500 flex gap-1 font-bold">
-			<span class="text-tertiary-500">
-				<Folder size={20} />
-			</span>
-			<span> Recent albums </span>
-		</div>
-		<ul class="mb-4 space-y-2">
-			{#each albums as album}
-				<li
-					class="w-full flex items-stretch justify-stretch px-8 py-2 rounded-full text-lg {activeItem ==
-					'Album - ' + album.title
-						? 'variant-filled-surface'
-						: ''}"
-				>
-					<a
-						on:click={() => {
-							drawerStore.close();
-							goto('/app/albums/' + album.id);
-						}}
-						href={'/app/albums/' + album.id}
-						class="text-primary-500 w-full"
+		{#if albums.length >= 1}
+			<div class="p-4 pl-2 text-sm text-primary-500 flex gap-1 font-bold">
+				<span class="text-tertiary-500">
+					<Folder size={20} />
+				</span>
+				<span> Recent albums </span>
+			</div>
+			<ul class="mb-4 space-y-2">
+				{#each albums as album}
+					<li
+						class="w-full flex items-stretch justify-stretch px-8 py-2 rounded-full text-lg {activeItem ==
+						'Album - ' + album.title
+							? 'variant-filled-surface'
+							: ''}"
 					>
-						{album.title}
-					</a>
-				</li>
-			{/each}
-		</ul>
+						<a
+							on:click={() => {
+								drawerStore.close();
+								goto('/app/albums/' + album.id);
+							}}
+							href={'/app/albums/' + album.id}
+							class="text-primary-500 w-full"
+						>
+							{album.title}
+						</a>
+					</li>
+				{/each}
+			</ul>
+		{/if}
 	</section>
 	<footer class="card-footer text-sm text-center">
 		Ultimate Cloud Storage <br /> Copywrite &copy; 2023 <br />
