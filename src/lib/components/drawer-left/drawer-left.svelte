@@ -2,6 +2,32 @@
 	import Star from 'carbon-icons-svelte/lib/Star.svelte';
 	import { drawerStore } from '@skeletonlabs/skeleton';
 	import { goto } from '$app/navigation';
+	import type { MenuItem } from '$lib/interfaces/menu-item.interface';
+	import { onMount } from 'svelte';
+	import { pageMetadataStore } from '$lib/stores/page-metadata.store';
+
+	let activeItem = '';
+
+	const menuItems: MenuItem[] = [
+		{
+			name: 'Home',
+			url: '/app',
+		},
+		{
+			name: 'All Files',
+			url: '/app/all',
+		},
+		{
+			name: 'Albums',
+			url: '/app/albums',
+		},
+	];
+
+	onMount(() => {
+		pageMetadataStore.subscribe((store) => {
+			activeItem = store.title;
+		});
+	});
 </script>
 
 <div class="p-4 h-full card flex flex-col">
@@ -13,43 +39,26 @@
 			</span>
 			<span> Featured </span>
 		</div>
-		<ul class="list list-nav mb-4">
-			<li class="w-full flex items-stretch justify-stretch pr-4">
-				<a
-					on:click={() => {
-						drawerStore.close();
-						goto('/app');
-					}}
-					href="/app"
-					class="text-primary-500 w-full"
+		<ul class="mb-4 space-y-2">
+			{#each menuItems as item}
+				<li
+					class="w-full flex items-stretch justify-stretch px-8 py-2 rounded-full text-lg {activeItem ==
+					item.name
+						? 'variant-filled-surface'
+						: ''}"
 				>
-					Home
-				</a>
-			</li>
-			<li class="w-full flex items-stretch justify-stretch pr-4">
-				<a
-					on:click={() => {
-						drawerStore.close();
-						goto('/app');
-					}}
-					href="/app"
-					class="text-primary-500 w-full"
-				>
-					Files
-				</a>
-			</li>
-			<li class="w-full flex items-stretch justify-stretch pr-4">
-				<a
-					on:click={() => {
-						drawerStore.close();
-						goto('/app/albums');
-					}}
-					href="/app/albums"
-					class="text-primary-500 w-full"
-				>
-					Albums
-				</a>
-			</li>
+					<a
+						on:click={() => {
+							drawerStore.close();
+							goto(item.url);
+						}}
+						href={item.url}
+						class="text-primary-500 w-full"
+					>
+						{item.name}
+					</a>
+				</li>
+			{/each}
 		</ul>
 	</section>
 	<footer class="card-footer text-sm text-center">
