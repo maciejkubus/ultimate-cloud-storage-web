@@ -81,7 +81,7 @@
 			{#each albums as album}
 				<li
 					class="w-full flex items-stretch justify-stretch px-8 py-2 rounded-full text-lg {activeItem ==
-					'Albums - ' + album.title
+					'Album - ' + album.title
 						? 'variant-filled-surface'
 						: ''}"
 				>
