@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import type { File } from '$lib/interfaces/file.interface';
 	import { FilesService } from '$lib/services/files.service';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
@@ -127,7 +128,7 @@
 		on:selectNone={selectNone}
 	/>
 	{#if mode === 'select'}
-		<div class="pb-4 w-full font-semibold text-2xl">
+		<div class="pb-4 w-full font-semibold text-2xl" transition:fade={{ duration: 300 }}>
 			Selected: {checkedRows.length}
 		</div>
 	{/if}
@@ -148,11 +149,14 @@
 					}
 				}}
 			>
-				<FilePreview
-					file={row}
-					imageClass="rounded-lg aspect-square object-cover"
-					containerClass="pointer-events-none z-10"
-				/>
+				<div class="rounded-lg overflow-hidden">
+					<FilePreview
+						file={row}
+						videoControls={false}
+						imageClass="aspect-square object-cover"
+						containerClass="pointer-events-none z-10 aspect-square overflow-hidden flex justify-center items-center variant-filled-primary group-hover:scale-110 transition-all duration-200 ease-in-out"
+					/>
+				</div>
 				<div
 					class="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100 w-full flex flex-col gap-1 p-2 variant-filled-secondary absolute top-full -translate-y-1 rounded-lg z-20 text-sm text-left transition-all duration-200 ease-in-out"
 				>
@@ -171,8 +175,8 @@
 					<div class="flex pt-2 gap-2 w-min sm:w-full">
 						<button
 							on:click|stopPropagation|preventDefault={() => {
-								checkRow(row.id);
 								mode = 'select';
+								checkRow(row.id);
 							}}
 							class="text-primary-600 hover:text-primary-500"
 						>

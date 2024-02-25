@@ -11,6 +11,7 @@
 	export let containerClass = '';
 	export let noPreviewClass = '';
 	export let file: File | null = null;
+	export let videoControls = true;
 	let type: FileType = FileType.FILE;
 	let src = '';
 	let alt = '';
@@ -32,7 +33,7 @@
 		{#if type === FileType.IMAGE}
 			<img {src} {alt} class={imageClass} />
 		{:else if type === FileType.VIDEO}
-			<video {src} class={videoClass} controls>
+			<video {src} class={videoClass} controls={videoControls}>
 				<track kind="captions" />
 			</video>
 		{:else if type === FileType.AUDIO}
