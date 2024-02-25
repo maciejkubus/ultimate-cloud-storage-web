@@ -55,8 +55,8 @@ export class NotesService {
     return note;
   }
 
-  async getNotes(): Promise<PaginatedResponse<Note[]>> {
-    const res = await fetch(config.apiBaseUrl + '/note/mine', {
+  async getNotes(page: number): Promise<PaginatedResponse<Note[]>> {
+    const res = await fetch(config.apiBaseUrl + '/note/mine?page=' + page, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',

@@ -26,6 +26,10 @@
 			url: '/app/albums',
 		},
 		{
+			name: 'Notes',
+			url: '/app/notes',
+		},
+		{
 			name: 'Settings',
 			url: '/app/settings',
 		},
