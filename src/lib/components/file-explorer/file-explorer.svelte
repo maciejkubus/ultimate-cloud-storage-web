@@ -13,7 +13,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	let view: 'table' | 'grid' = 'grid';
+	let view: 'table' | 'grid' = 'table';
 
 	onMount(() => {
 		userStore.subscribe((store) => {
