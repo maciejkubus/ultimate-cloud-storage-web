@@ -21,6 +21,10 @@
 			name: 'Albums',
 			url: '/app/albums',
 		},
+		{
+			name: 'Settings',
+			url: '/app/settings',
+		},
 	];
 
 	onMount(() => {
@@ -33,12 +37,6 @@
 <div class="p-4 h-full card flex flex-col">
 	<header class="card-header font-bold">Ultimate Cloud Storage</header>
 	<section class="flex-1 overflow-y-scroll py-4">
-		<div class="p-4 pl-2 text-sm text-primary-500 flex gap-1 font-bold">
-			<span class="text-tertiary-500">
-				<Star size={20} />
-			</span>
-			<span> Featured </span>
-		</div>
 		<ul class="mb-4 space-y-2">
 			{#each menuItems as item}
 				<li
