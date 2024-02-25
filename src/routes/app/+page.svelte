@@ -6,6 +6,7 @@
 	import { pageMetadataStore } from '$lib/stores/page-metadata.store';
 	import type { Paginated } from '$lib/interfaces/paginated.interface';
 	import PaginationBar from '$lib/components/pagination-bar/pagination-bar.svelte';
+	import FileExplorer from '$lib/components/file-explorer/file-explorer.svelte';
 
 	export let files: File[] = [];
 	const filesService = FilesService.getInstance();
@@ -38,7 +39,7 @@
 	};
 </script>
 
-<FileTable {files} />
+<FileExplorer {files} />
 <div class="mt-8">
 	<PaginationBar data={paginationData} on:change={pageChange} />
 </div>

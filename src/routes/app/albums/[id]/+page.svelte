@@ -10,6 +10,7 @@
 	import { FilesService } from '$lib/services/files.service';
 	import type { Paginated } from '$lib/interfaces/paginated.interface';
 	import PaginationBar from '$lib/components/pagination-bar/pagination-bar.svelte';
+	import FileExplorer from '$lib/components/file-explorer/file-explorer.svelte';
 
 	let files: File[] = [];
 	let album: Album | null = null;
@@ -70,7 +71,7 @@
 </svelte:head>
 
 {#if loaded}
-	<FileTable {files} {album} on:albumUpdate={albumUpdate} />
+	<FileExplorer {files} {album} on:albumUpdate={albumUpdate} />
 	<div class="mt-8">
 		<PaginationBar data={paginationData} on:change={pageChange} />
 	</div>
