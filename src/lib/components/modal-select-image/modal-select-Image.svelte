@@ -24,6 +24,7 @@
 
 	const pageChange = async (event: CustomEvent<Paginated>) => {
 		paginationData = event.detail;
+		images = [];
 		getImages();
 	};
 
