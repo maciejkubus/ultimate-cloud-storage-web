@@ -30,6 +30,10 @@
 			url: '/app/notes',
 		},
 		{
+			name: 'Download',
+			url: '/app/download',
+		},
+		{
 			name: 'Settings',
 			url: '/app/settings',
 		},
