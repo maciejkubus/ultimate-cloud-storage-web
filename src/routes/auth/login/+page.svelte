@@ -38,6 +38,9 @@
 					loggedIn: true,
 					access_token: res.access_token,
 					user: res.user,
+					preferences: {
+						view: 'table',
+					},
 				});
 				toastStore.trigger({
 					message: 'Logged in successfully',

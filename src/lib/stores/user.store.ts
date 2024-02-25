@@ -12,6 +12,9 @@ const defaultUser: UserStore = {
 		created: '',
 		updated: '',
 	},
+  preferences: {
+    view: 'table'
+  }
 };
 
 const userFromStorage = browser ? window.localStorage.getItem('user') + '' : '';
