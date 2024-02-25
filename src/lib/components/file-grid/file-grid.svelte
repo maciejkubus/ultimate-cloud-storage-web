@@ -4,6 +4,8 @@
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import FileUploader from '../file-uploader/file-uploader.svelte';
+	import Checkbox from 'carbon-icons-svelte/lib/Checkbox.svelte';
+	import CheckboxCheckedFilled from 'carbon-icons-svelte/lib/CheckboxCheckedFilled.svelte';
 	import FileTools from '../file-tools/file-tools.svelte';
 	import { modalStore, type ModalSettings, type ModalComponent } from '@skeletonlabs/skeleton';
 	import FolderOff from 'carbon-icons-svelte/lib/FolderOff.svelte';
@@ -18,6 +20,8 @@
 
 	const dispatch = createEventDispatcher();
 
+	let mode: 'preview' | 'select' = 'preview';
+
 	const albumsService = AlbumsService.getInstance();
 	const filesService = FilesService.getInstance();
 	let checkedRows: number[] = [];
@@ -28,6 +32,8 @@
 		} else {
 			checkedRows = [...checkedRows, id];
 		}
+
+		if (checkedRows.length <= 0) mode = 'preview';
 	};
 
 	const selectAll = () => {
@@ -120,6 +126,11 @@
 		on:selectAll={selectAll}
 		on:selectNone={selectNone}
 	/>
+	{#if mode === 'select'}
+		<div class="pb-4 w-full font-semibold text-2xl">
+			Selected: {checkedRows.length}
+		</div>
+	{/if}
 	<div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
 		{#each files as row, i}
 			<button
@@ -129,7 +140,13 @@
 					: 'border-transparent'}
         "
 				id="file-table-{i}"
-				on:click={() => checkRow(row.id)}
+				on:click={() => {
+					if (mode === 'preview') {
+						openModalPreview(row);
+					} else {
+						checkRow(row.id);
+					}
+				}}
 			>
 				<FilePreview
 					file={row}
@@ -152,6 +169,19 @@
 						{formatDate(row.created)}
 					</div>
 					<div class="flex pt-2 gap-2 w-min sm:w-full">
+						<button
+							on:click|stopPropagation|preventDefault={() => {
+								checkRow(row.id);
+								mode = 'select';
+							}}
+							class="text-primary-600 hover:text-primary-500"
+						>
+							{#if checkedRows.includes(row.id)}
+								<CheckboxCheckedFilled size={24} />
+							{:else}
+								<Checkbox size={24} />
+							{/if}
+						</button>
 						<button
 							on:click|stopPropagation|preventDefault={() => openModalPreview(row)}
 							class="text-primary-600 hover:text-primary-500"
