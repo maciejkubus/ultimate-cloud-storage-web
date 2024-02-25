@@ -19,6 +19,7 @@
 	const dispatch = createEventDispatcher();
 
 	const albumsService = AlbumsService.getInstance();
+	const filesService = FilesService.getInstance();
 	let checkedRows: number[] = [];
 
 	const checkRow = (id: number) => {
@@ -42,11 +43,72 @@
 		dispatch('albumUpdate', event.detail);
 	};
 
+	const formatDate = (dateString: string) => {
+		const date = new Date(dateString).toLocaleDateString();
+		return date;
+	};
+
+	const formatSize = (size: number) => {
+		const megaBytes = size / 1024 / 1024;
+		return megaBytes.toFixed(2) + ' MB';
+	};
+
+	const openModalRemoveFile = (file: File) => {
+		modalStore.trigger({
+			type: 'confirm',
+			title: 'Remove file',
+			body: 'Remove file ' + file.originalName + '?',
+			response: async (response: boolean) => {
+				if (!response) return;
+
+				const success = await filesService.deleteFile(file.id);
+				if (success) files = files.filter((f) => f.id !== file.id);
+			},
+		});
+	};
+
+	const openModalRemoveFileFromAlbum = (file: File) => {
+		modalStore.trigger({
+			type: 'confirm',
+			title: 'Remove file from album',
+			body: 'Remove file ' + file.originalName + ' from album ' + album?.title + '?',
+			response: async (response: boolean) => {
+				if (!response) return;
+				if (!album) return;
+
+				const success = await filesService.removeFileFromAlbum(file.id, album.id);
+				if (success) files = files.filter((f) => f.id !== file.id);
+			},
+		});
+	};
+
 	const uploaded = async (event: CustomEvent<File>) => {
 		if (album) {
 			await albumsService.addFilesToAlbum(album.id, [event.detail.id]);
 		}
 		files = [...files, event.detail];
+	};
+
+	/*
+  imageClass="max-w-screen max-h-screen p-8 pointer-events-none"
+	videoClass="max-w-screen max-h-screen p-8"
+	noPreviewClass="max-w-screen max-h-screen p-8"
+  */
+	const openModalPreview = (file: File) => {
+		const modalComponent: ModalComponent = {
+			ref: FilePreview,
+			props: {
+				file,
+				imageClass: 'max-w-screen max-h-screen p-8 pointer-events-none',
+				videoClass: 'max-w-screen max-h-screen p-8',
+				noPreviewClass: 'max-w-screen max-h-screen p-8',
+			},
+		};
+		const modal: ModalSettings = {
+			type: 'component',
+			component: modalComponent,
+		};
+		modalStore.trigger(modal);
 	};
 </script>
 
@@ -58,20 +120,68 @@
 		on:selectAll={selectAll}
 		on:selectNone={selectNone}
 	/>
-	<div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+	<div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
 		{#each files as row, i}
 			<button
-				class="aspect-square rounded-lg overflow-hidden border-2
-          {checkedRows.includes(row.id) ? 'border-secondary-500' : 'border-transparent'}
+				class="rounded-lg border-4 group relative
+          {checkedRows.includes(row.id)
+					? 'border-secondary-500 bg-secondary-500'
+					: 'border-transparent'}
         "
 				id="file-table-{i}"
 				on:click={() => checkRow(row.id)}
 			>
 				<FilePreview
 					file={row}
-					imageClass="aspect-square object-cover"
-					containerClass="pointer-events-none"
+					imageClass="rounded-lg aspect-square object-cover"
+					containerClass="pointer-events-none z-10"
 				/>
+				<div
+					class="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100 w-full flex flex-col gap-1 p-2 variant-filled-secondary absolute top-full -translate-y-1 rounded-lg z-20 text-sm text-left transition-all duration-200 ease-in-out"
+				>
+					<div class="overflow-hidden text-ellipsis whitespace-nowrap w-full sm:max-w-sm font-bold">
+						{row.originalName}
+					</div>
+					<div class="overflow-hidden text-ellipsis whitespace-nowrap w-full sm:max-w-sm">
+						{row.mimetype}
+					</div>
+					<div class="overflow-hidden text-ellipsis whitespace-nowrap w-full sm:max-w-sm">
+						{formatSize(row.size)}
+					</div>
+					<div class="overflow-hidden text-ellipsis whitespace-nowrap w-full sm:max-w-sm">
+						{formatDate(row.created)}
+					</div>
+					<div class="flex pt-2 gap-2 w-min sm:w-full">
+						<button
+							on:click|stopPropagation|preventDefault={() => openModalPreview(row)}
+							class="text-primary-600 hover:text-primary-500"
+						>
+							<Search size={24} />
+						</button>
+						<button
+							on:click|preventDefault={() => {
+								filesService.downloadFile(row.id, row.originalName);
+							}}
+							class="text-primary-600 hover:text-primary-500"
+						>
+							<Download size={24} />
+						</button>
+						<button
+							on:click|stopPropagation|preventDefault={() => openModalRemoveFile(row)}
+							class="text-primary-600 hover:text-primary-500"
+						>
+							<TrashCan size={24} />
+						</button>
+						{#if album}
+							<button
+								on:click|stopPropagation|preventDefault={() => openModalRemoveFileFromAlbum(row)}
+								class="text-primary-600 hover:text-primary-500"
+							>
+								<FolderOff size={24} />
+							</button>
+						{/if}
+					</div>
+				</div>
 			</button>
 		{/each}
 	</div>
