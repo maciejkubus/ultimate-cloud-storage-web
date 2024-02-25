@@ -29,6 +29,7 @@
 	};
 
 	const loadFiles = async () => {
+		files = [];
 		const response = await filesService.getAllMineFiles(paginationData.page);
 		paginationData = {
 			page: response.meta.currentPage,
