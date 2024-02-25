@@ -35,7 +35,7 @@
 	const loadNotes = async () => {
 		notes = [];
 		const res = await notesService.getNotes(1);
-		notes = res.data.slice(0, 2);
+		notes = res.data.slice(0, 3);
 	};
 </script>
 
