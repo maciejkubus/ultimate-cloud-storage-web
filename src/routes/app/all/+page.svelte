@@ -7,26 +7,39 @@
 	import type { Paginated } from '$lib/interfaces/paginated.interface';
 	import PaginationBar from '$lib/components/pagination-bar/pagination-bar.svelte';
 	import FileExplorer from '$lib/components/file-explorer/file-explorer.svelte';
-	import AlbumExplorer from '$lib/components/album-explorer/album-explorer.svelte';
 
 	export let files: File[] = [];
 	const filesService = FilesService.getInstance();
+	let paginationData: Paginated = {
+		page: 1,
+		totalPages: 1,
+		lastPage: 1,
+	};
 
 	onMount(() => {
 		pageMetadataStore.set({
-			title: 'Home',
+			title: 'All Files',
 		});
 		loadFiles();
 	});
 
+	const pageChange = async (event: CustomEvent<Paginated>) => {
+		paginationData = event.detail;
+		loadFiles();
+	};
+
 	const loadFiles = async () => {
-		const response = await filesService.getAllMineFiles(1);
+		const response = await filesService.getAllMineFiles(paginationData.page);
+		paginationData = {
+			page: response.meta.currentPage,
+			totalPages: response.meta.totalPages,
+			lastPage: response.meta.totalPages,
+		};
 		files = response.data;
 	};
 </script>
 
-<h2 class="font-semibold text-4xl mb-8">Recent albums</h2>
-<AlbumExplorer paginationVisible={false} />
-
-<h2 class="font-semibold text-4xl mb-8">Recent files</h2>
 <FileExplorer {files} />
+<div class="mt-8">
+	<PaginationBar data={paginationData} on:change={pageChange} />
+</div>

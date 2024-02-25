@@ -15,6 +15,8 @@
 	import type { Paginated } from '$lib/interfaces/paginated.interface';
 	import PaginationBar from '../pagination-bar/pagination-bar.svelte';
 
+	export let paginationVisible = true;
+
 	const albumsService = AlbumsService.getInstance();
 	let paginationData: Paginated = {
 		page: 1,
@@ -198,9 +200,11 @@
 				{/each}
 			</div>
 
-			<div class="mt-8">
-				<PaginationBar data={paginationData} on:change={pageChange} />
-			</div>
+			{#if paginationVisible}
+				<div class="mt-8">
+					<PaginationBar data={paginationData} on:change={pageChange} />
+				</div>
+			{/if}
 		{:else}
 			<div class="card px-4 py-8 variant-ringed-surface text-center space-y-4">
 				<h2 class="h2">It seems like you haven't created any albums yet.</h2>

@@ -54,7 +54,7 @@
 		</svelte:fragment>
 		<div class="container h-full mx-auto flex justify-center flex-row p-8">
 			<div class="w-full max-w-6xl">
-				<h1 class="text-3xl font-bold mb-8">{pageMetadata.title}</h1>
+				<h1 class="text-6xl font-bold mb-8">{pageMetadata.title}</h1>
 				<slot />
 			</div>
 		</div>
