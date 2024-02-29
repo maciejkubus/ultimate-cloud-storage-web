@@ -39,6 +39,8 @@
 	"type": "module",
 	"dependencies": {
 		"@tadashi/svelte-editor-quill": "^2.2.0",
+		"@types/nodemailer": "^6.4.14",
+		"nodemailer": "^6.9.11",
 		"svelte-forms-lib": "^2.0.1",
 		"yup": "^1.2.0"
 	}
