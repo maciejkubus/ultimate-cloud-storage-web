@@ -39,8 +39,11 @@ export class FilesService {
 		a.remove();
 	}
 
-	public async getFileBlob(id: number, name: string): Promise<Blob> {
-		const res = await fetch(config.apiBaseUrl + '/files/' + id + '/download', {
+	public async getFileBlob(id: number, name: string, access: 'private' | 'public' = 'private'): Promise<Blob> {
+    let url = config.apiBaseUrl + '/files/' + id + '/download';
+    if(access == 'public')
+      url = config.apiBaseUrl + '/public/' + id + '/download';
+		const res = await fetch(url, {
 			method: 'GET',
 			headers: {
 				Authorization: 'Bearer ' + FilesService.user.access_token,
@@ -49,6 +52,18 @@ export class FilesService {
 
 		const blob = await res.blob();
 		return blob;
+	}
+
+  public async getFile(id: number): Promise<UserFile> {
+		const res = await fetch(config.apiBaseUrl + '/files/' + id, {
+			method: 'GET',
+			headers: {
+				Authorization: 'Bearer ' + FilesService.user.access_token,
+			},
+		});
+
+		const file = await res.json();
+		return file;
 	}
 
 	public async getAllMineFiles(page: number): Promise<PaginatedResponse<UserFile[]>> {
@@ -134,5 +149,19 @@ export class FilesService {
 		}
 
 		return true;
+	}
+
+  public async shareFile(id: number): Promise<UserFile> {
+		const res = await fetch(config.apiBaseUrl + '/files/' + id + '/share', {
+			method: 'POST',
+			headers: {
+				Authorization: 'Bearer ' + FilesService.user.access_token,
+			},
+		});
+		if (res.status !== 201) {
+			throw new Error('Error');
+		}
+    const body = await res.json();
+		return body;
 	}
 }

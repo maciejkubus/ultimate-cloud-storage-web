@@ -5,6 +5,7 @@
 	import { createAccesibleFile } from '$lib/utils/create-accesible-file';
 	import { FileType } from '$lib/enums/file-type.enum';
 
+	export let access: 'private' | 'public' = 'private';
 	export let imageClass = '';
 	export let videoClass = '';
 	export let audioClass = '';
@@ -19,7 +20,7 @@
 
 	onMount(async () => {
 		if (!file) return;
-		const accesibleFile = await createAccesibleFile(file);
+		const accesibleFile = await createAccesibleFile(file, access);
 
 		type = accesibleFile.type;
 		src = accesibleFile.src;

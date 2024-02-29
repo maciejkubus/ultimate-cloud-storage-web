@@ -7,4 +7,5 @@ export interface File {
 	mimetype: string;
 	size: number;
 	path: string;
+  access?: 'public' | 'private';
 }

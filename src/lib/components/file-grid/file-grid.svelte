@@ -15,6 +15,8 @@
 	import Search from 'carbon-icons-svelte/lib/Search.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import FilePreview from '../file-preview/file-preview.svelte';
+	import Share from 'carbon-icons-svelte/lib/Share.svelte';
+	import { toastStore } from '@skeletonlabs/skeleton';
 
 	export let files: File[] = [];
 	export let album: Album | null = null;
@@ -117,6 +119,31 @@
 		};
 		modalStore.trigger(modal);
 	};
+
+	const shareFileModal = async (file: File) => {
+		const protocol = window ? window.location.protocol : '';
+		const host = window ? window.location.host : '';
+		const link = protocol + '//' + host + '/public/' + file.id;
+		const modal: ModalSettings = {
+			type: 'alert',
+			title: 'File shared',
+			body: `<a href=${link} target="_blank">${link}</a>`,
+		};
+		modalStore.trigger(modal);
+		navigator.clipboard.writeText(link);
+		toastStore.trigger({
+			message: 'Link copied!',
+		});
+	};
+
+	const shareFile = async (file: File) => {
+		try {
+			await filesService.shareFile(file.id);
+			shareFileModal(file);
+		} catch (err) {
+			console.error(err);
+		}
+	};
 </script>
 
 <div class="w-full">
@@ -214,6 +241,12 @@
 								<FolderOff size={24} />
 							</button>
 						{/if}
+						<button
+							on:click|stopPropagation|preventDefault={() => shareFile(row)}
+							class="text-primary-600 hover:text-primary-500"
+						>
+							<Share size={24} />
+						</button>
 					</div>
 				</div>
 			</button>
