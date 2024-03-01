@@ -1,4 +1,5 @@
 import { config } from "$lib/config";
+import type { Mail } from "$lib/interfaces/mail.interface";
 import type { Note } from "$lib/interfaces/note.interface";
 import type { PaginatedResponse } from "$lib/interfaces/paginated-response.interdace";
 import type { UserStore } from "$lib/interfaces/user-store.interface";
@@ -91,5 +92,18 @@ export class NotesService {
 				Authorization: 'Bearer ' + NotesService.user.access_token,
 			},
 		});
+  }
+
+  async sendMail(mail: Mail) {
+    const res = await fetch(config.apiBaseUrl + '/mail', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + NotesService.user.access_token,
+			},
+      body: JSON.stringify(mail)
+		});
+
+    return res.ok;
   }
 }
