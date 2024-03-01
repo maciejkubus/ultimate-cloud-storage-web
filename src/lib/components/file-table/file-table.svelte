@@ -14,6 +14,7 @@
 	import FilePreview from '../file-preview/file-preview.svelte';
 	import Share from 'carbon-icons-svelte/lib/Share.svelte';
 	import { toastStore } from '@skeletonlabs/skeleton';
+	import FileActions from '../file-actions/file-actions.svelte';
 
 	export let files: File[] = [];
 	export let album: Album | null = null;
@@ -55,35 +56,6 @@
 		return megaBytes.toFixed(2) + ' MB';
 	};
 
-	const openModalRemoveFile = (file: File) => {
-		modalStore.trigger({
-			type: 'confirm',
-			title: 'Remove file',
-			body: 'Remove file ' + file.originalName + '?',
-			response: async (response: boolean) => {
-				if (!response) return;
-
-				const success = await filesService.deleteFile(file.id);
-				if (success) files = files.filter((f) => f.id !== file.id);
-			},
-		});
-	};
-
-	const openModalRemoveFileFromAlbum = (file: File) => {
-		modalStore.trigger({
-			type: 'confirm',
-			title: 'Remove file from album',
-			body: 'Remove file ' + file.originalName + ' from album ' + album?.title + '?',
-			response: async (response: boolean) => {
-				if (!response) return;
-				if (!album) return;
-
-				const success = await filesService.removeFileFromAlbum(file.id, album.id);
-				if (success) files = files.filter((f) => f.id !== file.id);
-			},
-		});
-	};
-
 	const uploaded = async (event: CustomEvent<File>) => {
 		if (album) {
 			await albumsService.addFilesToAlbum(album.id, [event.detail.id]);
@@ -91,51 +63,8 @@
 		files = [...files, event.detail];
 	};
 
-	/*
-  imageClass="max-w-screen max-h-screen p-8 pointer-events-none"
-	videoClass="max-w-screen max-h-screen p-8"
-	noPreviewClass="max-w-screen max-h-screen p-8"
-  */
-	const openModalPreview = (file: File) => {
-		const modalComponent: ModalComponent = {
-			ref: FilePreview,
-			props: {
-				file,
-				imageClass: 'max-w-screen max-h-screen p-8 pointer-events-none',
-				videoClass: 'max-w-screen max-h-screen p-8',
-				noPreviewClass: 'max-w-screen max-h-screen p-8',
-			},
-		};
-		const modal: ModalSettings = {
-			type: 'component',
-			component: modalComponent,
-		};
-		modalStore.trigger(modal);
-	};
-
-	const shareFileModal = async (file: File) => {
-		const protocol = window ? window.location.protocol : '';
-		const host = window ? window.location.host : '';
-		const link = protocol + '//' + host + '/public/' + file.id;
-		const modal: ModalSettings = {
-			type: 'alert',
-			title: 'File shared',
-			body: `<a href=${link} target="_blank">${link}</a>`,
-		};
-		modalStore.trigger(modal);
-		navigator.clipboard.writeText(link);
-		toastStore.trigger({
-			message: 'Link copied!',
-		});
-	};
-
-	const shareFile = async (file: File) => {
-		try {
-			await filesService.shareFile(file.id);
-			shareFileModal(file);
-		} catch (err) {
-			console.error(err);
-		}
+	const remove = (event: CustomEvent<File>) => {
+		dispatch('remove', event.detail);
 	};
 </script>
 
@@ -177,40 +106,7 @@
 					<td class="hidden md:table-cell">{formatDate(row.created)}</td>
 					<td>
 						<div class="flex justify-center items-center gap-2 w-min sm:w-full">
-							<button
-								on:click|stopPropagation|preventDefault={() => openModalPreview(row)}
-								class="text-tertiary-500 hover:text-primary-500"
-							>
-								<Search size={24} />
-							</button>
-							<button
-								on:click|preventDefault={() => {
-									filesService.downloadFile(row.id, row.originalName);
-								}}
-								class="text-tertiary-500 hover:text-primary-500"
-							>
-								<Download size={24} />
-							</button>
-							<button
-								on:click|stopPropagation|preventDefault={() => openModalRemoveFile(row)}
-								class="text-tertiary-500 hover:text-primary-500"
-							>
-								<TrashCan size={24} />
-							</button>
-							{#if album}
-								<button
-									on:click|stopPropagation|preventDefault={() => openModalRemoveFileFromAlbum(row)}
-									class="text-tertiary-500 hover:text-primary-500"
-								>
-									<FolderOff size={24} />
-								</button>
-							{/if}
-							<button
-								on:click|stopPropagation|preventDefault={() => shareFile(row)}
-								class="text-tertiary-500 hover:text-primary-500"
-							>
-								<Share size={24} />
-							</button>
+							<FileActions file={row} on:remove={remove} />
 						</div>
 					</td>
 				</tr>

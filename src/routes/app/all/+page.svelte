@@ -8,13 +8,14 @@
 	import PaginationBar from '$lib/components/pagination-bar/pagination-bar.svelte';
 	import FileExplorer from '$lib/components/file-explorer/file-explorer.svelte';
 
-	export let files: File[] = [];
+	let files: File[] = [];
 	const filesService = FilesService.getInstance();
 	let paginationData: Paginated = {
 		page: 1,
 		totalPages: 1,
 		lastPage: 1,
 	};
+	let loaded = false;
 
 	onMount(() => {
 		pageMetadataStore.set({
@@ -29,6 +30,7 @@
 	};
 
 	const loadFiles = async () => {
+		loaded = false;
 		files = [];
 		const response = await filesService.getAllMineFiles(paginationData.page);
 		paginationData = {
@@ -37,10 +39,15 @@
 			lastPage: response.meta.totalPages,
 		};
 		files = response.data;
+		loaded = true;
+	};
+
+	const remove = () => {
+		loadFiles();
 	};
 </script>
 
-<FileExplorer {files} />
+<FileExplorer {files} on:remove={remove} />
 <div class="mt-8">
 	<PaginationBar data={paginationData} on:change={pageChange} />
 </div>

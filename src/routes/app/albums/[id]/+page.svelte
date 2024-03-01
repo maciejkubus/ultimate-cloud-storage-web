@@ -64,6 +64,10 @@
 		files = album?.files || [];
 		loadAlbum();
 	};
+
+	const remove = () => {
+		loadAlbum();
+	};
 </script>
 
 <svelte:head>
@@ -71,7 +75,7 @@
 </svelte:head>
 
 {#if loaded}
-	<FileExplorer {files} {album} on:albumUpdate={albumUpdate} />
+	<FileExplorer {files} {album} on:albumUpdate={albumUpdate} on:remove={remove} />
 	<div class="mt-8">
 		<PaginationBar data={paginationData} on:change={pageChange} />
 	</div>

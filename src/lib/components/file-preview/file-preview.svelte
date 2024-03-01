@@ -4,6 +4,7 @@
 	import FolderOff from 'carbon-icons-svelte/lib/FolderOff.svelte';
 	import { createAccesibleFile } from '$lib/utils/create-accesible-file';
 	import { FileType } from '$lib/enums/file-type.enum';
+	import CircleDash from 'carbon-icons-svelte/lib/CircleDash.svelte';
 
 	export let access: 'private' | 'public' = 'private';
 	export let imageClass = '';
@@ -49,5 +50,11 @@
 				<div class="mt-4 text-gray-400">No preview available</div>
 			</div>
 		{/if}
+	</div>
+{:else}
+	<div class="variant-filled-secondary flex justify-center items-center {containerClass}">
+		<div class="animate-spin">
+			<CircleDash size={32} />
+		</div>
 	</div>
 {/if}

@@ -13,11 +13,12 @@
 	import { goto } from '$app/navigation';
 	import NoteTile from '$lib/components/note-tile/note-tile.svelte';
 
-	export let files: File[] = [];
+	let files: File[] = [];
 	const filesService = FilesService.getInstance();
 
 	const notesService: NotesService = NotesService.getInstance();
 	let notes: Note[] = [];
+	let loaded = false;
 
 	onMount(() => {
 		pageMetadataStore.set({
@@ -28,14 +29,20 @@
 	});
 
 	const loadFiles = async () => {
+		loaded = false;
 		const response = await filesService.getAllMineFiles(1);
 		files = response.data;
+		loaded = true;
 	};
 
 	const loadNotes = async () => {
 		notes = [];
 		const res = await notesService.getNotes(1);
 		notes = res.data.slice(0, 3);
+	};
+
+	const remove = () => {
+		loadFiles();
 	};
 </script>
 
@@ -59,4 +66,6 @@
 </div>
 
 <h2 class="font-semibold text-4xl mb-8">Recent files</h2>
-<FileExplorer {files} />
+{#if loaded}
+	<FileExplorer {files} on:remove={remove} />
+{/if}

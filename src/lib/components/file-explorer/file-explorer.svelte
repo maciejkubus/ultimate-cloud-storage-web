@@ -35,6 +35,11 @@
 			};
 		});
 	};
+
+	const remove = (event: CustomEvent<File>) => {
+		dispatch('remove', event.detail);
+		//files = files.filter((f) => f.id !== event.detail.id);
+	};
 </script>
 
 <div class="w-full mb-4 flex">
@@ -53,7 +58,7 @@
 </div>
 
 {#if view === 'table'}
-	<FileTable {files} {album} on:albumUpdate={albumUpdate} />
+	<FileTable {files} {album} on:albumUpdate={albumUpdate} on:remove={remove} />
 {:else}
-	<FileGrid {files} {album} on:albumUpdate={albumUpdate} />
+	<FileGrid {files} {album} on:albumUpdate={albumUpdate} on:remove={remove} />
 {/if}
