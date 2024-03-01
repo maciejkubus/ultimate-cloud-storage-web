@@ -54,8 +54,8 @@ export class FilesService {
 		return blob;
 	}
 
-  public async getFile(id: number): Promise<UserFile> {
-		const res = await fetch(config.apiBaseUrl + '/files/' + id, {
+  public async getFile(id: number, access: 'files' | 'public' = 'files'): Promise<UserFile> {
+		const res = await fetch(config.apiBaseUrl + '/' + access + '/' + id, {
 			method: 'GET',
 			headers: {
 				Authorization: 'Bearer ' + FilesService.user.access_token,

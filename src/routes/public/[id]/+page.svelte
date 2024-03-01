@@ -14,7 +14,7 @@
 
 	onMount(async () => {
 		const id = $page.params.id;
-		file = await filesService.getFile(+id);
+		file = await filesService.getFile(+id, 'public');
 	});
 
 	const shareFileModal = async (file: File) => {
