@@ -11,7 +11,7 @@
 
 	let note: Note;
 	let saving = false;
-	let timeout: number = 0;
+	let timeout: NodeJS.Timeout | number = 0;
 	let notesService: NotesService;
 
 	onMount(() => {
