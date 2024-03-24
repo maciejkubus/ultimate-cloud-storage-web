@@ -31,7 +31,6 @@
 
 		if (user.loggedIn) {
 			const userServices = UserService.getInstance();
-			console.log(user, userServices.getMe());
 		} else {
 			window.location.href = '/auth/login';
 		}
