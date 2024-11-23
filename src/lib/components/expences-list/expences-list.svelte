@@ -39,24 +39,30 @@
               {index == expences.length - 1 ? 'pb-4' : ''}
       "
 		>
-			<div class="flex flex-col xl:gap-2 xl:justify-center xl:items-center">
-				<div class="xl:text-2xl font-bold">{expence.amount} zł</div>
-				<div class="text-xs xl:text-base">
+			<div class="flex flex-col xl:gap-2 xl:justify-center xl:items-center w-40">
+				<div
+					class="xl:text-2xl font-bold {expence.isTransactionOut
+						? 'text-rose-400'
+						: 'text-emerald-400'}"
+				>
+					{expence.isTransactionOut ? '-' : '+'}{expence.amount} zł
+				</div>
+				<div class="text-xs xl:text-base h-8">
 					{formatDate(expence.created ? expence.created : '')}
 				</div>
 			</div>
-			<div class="flex flex-col gap-1 xl:gap-2 w-full pt-4 xl:pt-0">
-				<h4 class="text-lg xl:text-xl font-bold">{expence.name}</h4>
-				{#if expence.description}
-					<p class="text-sm xl:text-base">{expence.description}</p>
-				{/if}
+			<div class="flex flex-col gap-1 xl:gap-2 w-full pt-2 xl:pt-0">
+				<h4 class="text-lg xl:text-2xl font-bold">{expence.name}</h4>
+				<p class="text-sm xl:text-base h-8 {!expence.description ? 'italic text-slate-400' : ''}">
+					{expence.description ? expence.description : '(Brak opisu)'}
+				</p>
 			</div>
-			<div class="flex justify-end pt-4 xl:pt-0">
+			<div class="flex justify-end xl:justify-center items-center pt-4 xl:pt-0">
 				<button
 					on:click|stopPropagation|preventDefault={() => openModalRemove(expence)}
 					class="text-primary-600 hover:text-primary-500"
 				>
-					<TrashCan size={20} />
+					<TrashCan size={24} />
 				</button>
 			</div>
 		</div>

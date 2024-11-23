@@ -2,7 +2,7 @@
 	import { createForm } from 'svelte-forms-lib';
 	import FormInput from '$lib/components/form-input/form-input.svelte';
 	import * as yup from 'yup';
-	import { toastStore } from '@skeletonlabs/skeleton';
+	import { ListBox, ListBoxItem, SlideToggle, toastStore } from '@skeletonlabs/skeleton';
 	import { ExpencesService } from '$lib/services/expences.service';
 	import { createEventDispatcher } from 'svelte';
 
@@ -10,6 +10,7 @@
 	const expenceService = ExpencesService.getInstance();
 	const dispatch = createEventDispatcher();
 
+	let transactionOut = true;
 	const { form, errors, handleChange, handleSubmit } = createForm({
 		initialValues: {
 			name: '',
@@ -45,6 +46,7 @@
 					name: $form.name,
 					amount: parseFloat($form.amount),
 					description: $form.description,
+					isTransactionOut: transactionOut,
 				});
 				dispatch('new', expence);
 				toastStore.trigger({
@@ -71,7 +73,7 @@
 <div class="w-full p-6 rounded-lg variant-filled-surface shadow-lg">
 	<h3 class="text-4xl">Add transaction</h3>
 	<form on:submit|preventDefault={handleSubmit} class="mt-8">
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+		<div class="grid grid-cols-1 lg:grid-cols-2 xl:gap-8">
 			<FormInput>
 				<span slot="label" class="pl-2"> Name </span>
 				<input
@@ -95,6 +97,7 @@
 					slot="input"
 					class="input"
 					type="number"
+					step=".01"
 					placeholder="Value of transaction"
 					on:change={handleChange}
 					bind:value={$form.amount}
@@ -111,7 +114,8 @@
 			<span slot="label" class="pl-2"> Description </span>
 			<textarea
 				slot="input"
-				class="input h-24"
+				class="input resize-none"
+				rows="1"
 				placeholder="Description"
 				on:change={handleChange}
 				bind:value={$form.description}
@@ -123,7 +127,16 @@
 				{/if}
 			</span>
 		</FormInput>
-		<div class="w-full flex justify-end">
+		<div class="w-full flex justify-between gap-8">
+			<SlideToggle
+				name="slider-label"
+				bind:checked={transactionOut}
+				active="bg-secondary-500"
+				size="sm"
+				class="text-sm"
+			>
+				Przelew wychodzący
+			</SlideToggle>
 			<button class="btn variant-filled-secondary px-8" disabled={loading}> Add </button>
 		</div>
 	</form>

@@ -61,30 +61,25 @@
 	<title>Ultimate Cloud Storage - Finances</title>
 </svelte:head>
 
-<div class="w-full pb-16 flex flex-col xl:flex-row items-stretch gap-16">
-	<div class="w-full xl:w-2/3">
+<div class="w-full pb-16 flex flex-col xl:flex-row items-stretch gap-14">
+	<div class="w-full xl:w-2/3 xl:h-[411px]">
 		<ExpenceAdder on:new={newExpence} />
 	</div>
-	<div class="w-full xl:w-1/3 flex flex-row xl:flex-col gap-4 items-stretch">
+	<div
+		class="w-full xl:w-1/3 flex flex-row xl:flex-col gap-4 items-stretch justify-between xl:h-[411px]"
+	>
 		<div
-			class="w-1/3 xl:w-full p-4 xl:p-8 flex flex-col justify-center items-center variant-filled-secondary rounded-lg shadow-lg"
+			class="w-1/2 xl:w-full p-4 xl:p-12 flex flex-col justify-center items-center variant-filled-secondary rounded-lg shadow-lg"
 		>
 			<h3 class="text-4xl font-bold">2137 zł</h3>
 			<p class="text-xl mt-2">twoje środki</p>
 		</div>
 		<a
-			class="w-1/3 xl:w-full p-4 xl:p-8 flex flex-col justify-center items-center variant-filled-surface rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
+			class="w-1/2 xl:w-full p-4 xl:p-12 flex flex-col justify-center items-center variant-filled-surface rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
 			href="/finances/stats"
 		>
 			<h3 class="text-2xl font-bold">Your Raport</h3>
 			<p class="underline">go to page</p>
-		</a>
-		<a
-			class="w-1/3 xl:w-full p-4 xl:p-8 flex flex-col justify-center items-center variant-filled-surface rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
-			href="/settings"
-		>
-			<h3 class="text-2xl font-bold">Settings</h3>
-			<p class="underline">go to your account</p>
 		</a>
 	</div>
 </div>
