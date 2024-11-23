@@ -26,6 +26,10 @@
 			url: '/app/albums',
 		},
 		{
+			name: 'Finances',
+			url: '/app/finances',
+		},
+		{
 			name: 'Notes',
 			url: '/app/notes',
 		},
