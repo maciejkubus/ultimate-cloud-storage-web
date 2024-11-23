@@ -49,6 +49,19 @@ export class ExpencesService {
     return expenses;
   }
 
+  async getStats() {
+    const res = await fetch(config.apiBaseUrl + '/expenses/stats', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + ExpencesService.user.access_token,
+			},
+		});
+
+    const data = res.json();
+    return data;
+  }
+
   async delete(id: number) {
     await fetch(config.apiBaseUrl + '/expenses/' + id, {
 			method: 'DELETE',

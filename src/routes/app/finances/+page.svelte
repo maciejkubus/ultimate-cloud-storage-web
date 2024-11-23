@@ -11,6 +11,7 @@
 
 	let expenceService: ExpencesService;
 	let expences: Expence[] = [];
+	let stats: any;
 	let loading = true;
 	let paginationData: Paginated = {
 		page: 1,
@@ -42,6 +43,7 @@
 		});
 
 		expenceService = ExpencesService.getInstance();
+		stats = await expenceService.getStats();
 		await loadExpences(1);
 	});
 
@@ -71,7 +73,7 @@
 		<div
 			class="w-1/2 xl:w-full p-4 xl:p-12 flex flex-col justify-center items-center variant-filled-secondary rounded-lg shadow-lg"
 		>
-			<h3 class="text-4xl font-bold">2137 zł</h3>
+			<h3 class="text-4xl font-bold">{stats ? stats.sum.toFixed(2) : ''} zł</h3>
 			<p class="text-xl mt-2">twoje środki</p>
 		</div>
 		<a
