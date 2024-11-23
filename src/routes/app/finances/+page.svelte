@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ExpenceAdder from '$lib/components/expence-adder/expence-adder.svelte';
-	import { Expence } from '$lib/interfaces/expence.interface';
+	// import { Expence } from '$lib/interfaces/expence.interface';
 	import { pageMetadataStore } from '$lib/stores/page-metadata.store';
 	import { onMount } from 'svelte';
 
@@ -10,7 +10,7 @@
 		});
 	});
 
-	function newExpence(event: CustomEvent<Expence>) {
+	function newExpence(event: CustomEvent<any>) {
 		console.log(event.detail);
 	}
 </script>
@@ -21,7 +21,7 @@
 
 <div class="w-full pb-16 flex flex-col lg:flex-row items-stretch gap-16">
 	<div class="w-full lg:w-2/3">
-		<ExpenceAdder />
+		<ExpenceAdder on:new={newExpence} />
 	</div>
 	<div class="none md:flex w-1/3 bg-cyan-50 rounded-lg shadow-lg" />
 </div>
