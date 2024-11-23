@@ -1,6 +1,7 @@
 import { config } from "$lib/config";
-import { Expence } from "$lib/interfaces/expence.interface";
-import { UserStore } from "$lib/interfaces/user-store.interface";
+import { type Expence } from "$lib/interfaces/expence.interface";
+import type { PaginatedResponse } from "$lib/interfaces/paginated-response.interdace";
+import { type UserStore } from "$lib/interfaces/user-store.interface";
 import { userStore } from "$lib/stores/user.store";
 
 export class ExpencesService {
@@ -21,7 +22,7 @@ export class ExpencesService {
 	}
 
   async create(content: Expence): Promise<Expence> {
-    const res = await fetch(config.apiBaseUrl + '/expences', {
+    const res = await fetch(config.apiBaseUrl + '/expenses', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -33,5 +34,28 @@ export class ExpencesService {
     const expence = res.json();
 
     return expence;
+  }
+
+  async getExpences(page: number): Promise<PaginatedResponse<Expence[]>> {
+    const res = await fetch(config.apiBaseUrl + '/expenses?page=' + page, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + ExpencesService.user.access_token,
+			},
+		});
+
+    const expenses = res.json();
+    return expenses;
+  }
+
+  async delete(id: number) {
+    await fetch(config.apiBaseUrl + '/expenses/' + id, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + ExpencesService.user.access_token,
+			},
+		});
   }
 }
