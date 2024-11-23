@@ -65,11 +65,38 @@
 	<div class="w-full xl:w-2/3">
 		<ExpenceAdder on:new={newExpence} />
 	</div>
-	<div class="none md:flex w-1/3 bg-cyan-50 rounded-lg shadow-lg" />
+	<div class="w-full xl:w-1/3 flex flex-row xl:flex-col gap-4 items-stretch">
+		<div
+			class="w-1/3 xl:w-full p-4 xl:p-8 flex flex-col justify-center items-center variant-filled-secondary rounded-lg shadow-lg"
+		>
+			<h3 class="text-4xl font-bold">2137 zł</h3>
+			<p class="text-xl mt-2">twoje środki</p>
+		</div>
+		<a
+			class="w-1/3 xl:w-full p-4 xl:p-8 flex flex-col justify-center items-center variant-filled-surface rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
+			href="/finances/stats"
+		>
+			<h3 class="text-2xl font-bold">Your Raport</h3>
+			<p class="underline">go to page</p>
+		</a>
+		<a
+			class="w-1/3 xl:w-full p-4 xl:p-8 flex flex-col justify-center items-center variant-filled-surface rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
+			href="/settings"
+		>
+			<h3 class="text-2xl font-bold">Settings</h3>
+			<p class="underline">go to your account</p>
+		</a>
+	</div>
 </div>
+{#if expences.length > 0}
+	<ExpencesList {expences} on:remove={(e) => remove(e.detail)} />
 
-<ExpencesList {expences} on:remove={(e) => remove(e.detail)} />
-
-<div class="mt-8">
-	<PaginationBar data={paginationData} on:change={pageChange} />
-</div>
+	<div class="mt-8">
+		<PaginationBar data={paginationData} on:change={pageChange} />
+	</div>
+{:else}
+	<div class="w-full text-center pb-16">
+		<h4 class="text-4xl">Nic tu nie ma</h4>
+		<p class="text-2xl mt-2 opacity-75">Dodaj transakcje w formularzu powyżej</p>
+	</div>
+{/if}

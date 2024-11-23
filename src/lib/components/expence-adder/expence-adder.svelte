@@ -68,7 +68,7 @@
 	});
 </script>
 
-<div class="w-full p-8 rounded-lg variant-filled-surface shadow-lg">
+<div class="w-full p-6 rounded-lg variant-filled-surface shadow-lg">
 	<h3 class="text-4xl">Add transaction</h3>
 	<form on:submit|preventDefault={handleSubmit} class="mt-8">
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
