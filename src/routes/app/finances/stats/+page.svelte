@@ -10,6 +10,7 @@
 	import { onMount } from 'svelte';
 	import type { UserStore } from '$lib/interfaces/user-store.interface';
 	import { userStore } from '$lib/stores/user.store';
+	import { months } from '$lib/utils/months';
 
 	let user: UserStore;
 
@@ -21,6 +22,7 @@
 	let expences: Expence[] = [];
 	let stats: any;
 	let loading = true;
+	const now = new Date();
 
 	onMount(async () => {
 		pageMetadataStore.set({
@@ -59,5 +61,22 @@
 			<h3 class="text-2xl font-bold">Your finances</h3>
 			<p class="underline">go back</p>
 		</a>
+	</div>
+</div>
+
+<div class="w-full pb-16 flex flex-col xl:flex-row items-stretch gap-14">
+	<div
+		class="w-full bg-success-600 flex justify-between items-center gap-4 p-8 rounded-lg shadow-lg"
+	>
+		<h2 class="text-lg xl:text-2xl font-bold">Income in {months[now.getMonth()]}</h2>
+		<p class="text-2xl xl:text-4x font-bold">
+			{stats?.raport?.currentMonth?.income?.toFixed(2)} zł
+		</p>
+	</div>
+	<div class="w-full bg-rose-600 flex justify-between items-center gap-4 p-8 rounded-lg shadow-lg">
+		<h2 class="text-lg xl:text-2xl font-bold">Outcome in {months[now.getMonth()]}</h2>
+		<p class="text-2xl xl:text-4x font-bold">
+			{stats?.raport?.currentMonth?.outcome?.toFixed(2)} zł
+		</p>
 	</div>
 </div>
