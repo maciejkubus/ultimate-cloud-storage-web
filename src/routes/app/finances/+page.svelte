@@ -11,7 +11,8 @@
 
 	let expenceService: ExpencesService;
 	let expences: Expence[] = [];
-	let stats: any;
+	let stats: { sum: number; raport: any };
+	let currentMoney = '0.00';
 	let loading = true;
 	let paginationData: Paginated = {
 		page: 1,
@@ -37,18 +38,24 @@
 		loading = true;
 	};
 
+	async function loadStats() {
+		stats = await expenceService.getStats();
+		currentMoney = stats.sum.toFixed(2);
+	}
+
 	onMount(async () => {
 		pageMetadataStore.set({
 			title: 'Finances',
 		});
 
 		expenceService = ExpencesService.getInstance();
-		stats = await expenceService.getStats();
+		await loadStats();
 		await loadExpences(1);
 	});
 
-	function newExpence(event: CustomEvent<any>) {
+	async function newExpence(event: CustomEvent<any>) {
 		expences = [event.detail, ...expences];
+		await loadStats();
 	}
 
 	async function remove(expence: Expence) {
@@ -56,6 +63,7 @@
 
 		await expenceService.delete(expence.id);
 		loadExpences(paginationData.page);
+		await loadStats();
 	}
 </script>
 
@@ -73,12 +81,12 @@
 		<div
 			class="w-1/2 xl:w-full p-4 xl:p-12 flex flex-col justify-center items-center variant-filled-secondary rounded-lg shadow-lg"
 		>
-			<h3 class="text-4xl font-bold">{stats ? stats.sum.toFixed(2) : ''} zł</h3>
+			<h3 class="text-4xl font-bold">{currentMoney} zł</h3>
 			<p class="text-xl mt-2">twoje środki</p>
 		</div>
 		<a
 			class="w-1/2 xl:w-full p-4 xl:p-12 flex flex-col justify-center items-center variant-filled-surface rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
-			href="/finances/stats"
+			href="/app/finances/stats"
 		>
 			<h3 class="text-2xl font-bold">Your Raport</h3>
 			<p class="underline">go to page</p>
