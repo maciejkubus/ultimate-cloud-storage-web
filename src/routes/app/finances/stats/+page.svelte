@@ -87,5 +87,4 @@
 	<div class="w-full pb-8">
 		<ExpenceChart chart={stats.raport.lastYear.graph} />
 	</div>
-	<!-- incone and outcome of last year -->
 {/if}
