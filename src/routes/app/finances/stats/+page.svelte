@@ -11,6 +11,7 @@
 	import type { UserStore } from '$lib/interfaces/user-store.interface';
 	import { userStore } from '$lib/stores/user.store';
 	import { months } from '$lib/utils/months';
+	import ExpenceChart from '$lib/components/expense-chart/expence-chart.svelte';
 
 	let user: UserStore;
 
@@ -31,6 +32,7 @@
 
 		expenceService = ExpencesService.getInstance();
 		stats = await expenceService.getStats();
+		loading = false;
 	});
 </script>
 
@@ -38,7 +40,7 @@
 	<title>Ultimate Cloud Storage - Finances</title>
 </svelte:head>
 
-<div class="w-full pb-16 flex flex-col xl:flex-row items-stretch gap-14">
+<div class="w-full pb-8 flex flex-col xl:flex-row items-stretch gap-14">
 	<div
 		class="w-full xl:w-2/3 xl:h-[411px] variant-filled-surface flex flex-col justify-center items-center gap-4 p-8 rounded-lg shadow-lg"
 	>
@@ -64,7 +66,7 @@
 	</div>
 </div>
 
-<div class="w-full pb-16 flex flex-col xl:flex-row items-stretch gap-14">
+<div class="w-full pb-8 flex flex-col xl:flex-row items-stretch gap-14">
 	<div
 		class="w-full bg-success-600 flex justify-between items-center gap-4 p-8 rounded-lg shadow-lg"
 	>
@@ -80,3 +82,10 @@
 		</p>
 	</div>
 </div>
+
+{#if !loading}
+	<div class="w-full pb-8">
+		<ExpenceChart chart={stats.raport.lastYear.graph} />
+	</div>
+	<!-- incone and outcome of last year -->
+{/if}

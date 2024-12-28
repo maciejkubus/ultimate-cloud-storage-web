@@ -1,0 +1,20 @@
+.tooltip-host {
+	position: relative;
+}
+
+.tooltip {
+	position: absolute;
+	left: -16px;
+	width: 88px;
+	text-align: center;
+	bottom: calc(100% - 4px);
+
+	pointer-events: none;
+	opacity: 0;
+	transition: all .3s ease-out;
+}
+
+.tooltip-host:hover .tooltip {
+	bottom: calc(100% + 4px);
+	opacity: 1;
+}
