@@ -97,6 +97,7 @@
 			{#each data as item}
 				<div class="w-full flex flex-col justify-end items-center">
 					<div class="w-full flex justify-center items-end gap-1">
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						<div
 							class="bg-success-600 w-12 border-b-8 border-success-700 shadow-outline shadow-success-500 tooltip-host cursor-pointer"
 							style="height: {getBarHeight(item.income)}px"
@@ -107,9 +108,11 @@
 								{item.income.toFixed(2)}
 							</div>
 						</div>
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						<div
-							class="bg-rose-600 w-12 border-b-8 border-rose-700 shadow-outline shadow-rose-500 tooltip-host"
+							class="bg-rose-600 w-12 border-b-8 border-rose-700 shadow-outline shadow-rose-500 tooltip-host cursor-pointer"
 							style="height: {getBarHeight(item.outcome)}px"
+							on:click={() => changeDate(item.year + '-' + item.monthNum)}
 						>
 							<div class="tooltip variant-filled-secondary px-2 py-1 rounded-lg text-sm">
 								<span class="text-xs">Outcome</span> <br />
@@ -128,11 +131,11 @@
 		</div>
 	</div>
 {/if}
-{#if expences.length > 0}
-	<div class="w-full pt-16">
+<div class="w-full pt-16 min-h-[400px]">
+	{#if expences.length > 0}
 		<ExpencesList {expences} hideRemoveBtn={true} />
 		<div class="mt-8">
 			<PaginationBar data={paginationData} on:change={pageChange} />
 		</div>
-	</div>
-{/if}
+	{/if}
+</div>
