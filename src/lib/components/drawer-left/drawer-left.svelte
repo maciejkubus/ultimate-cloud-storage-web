@@ -30,6 +30,10 @@
 			url: '/app/finances',
 		},
 		{
+			name: 'Calendar',
+			url: '/app/calendar',
+		},
+		{
 			name: 'Notes',
 			url: '/app/notes',
 		},
