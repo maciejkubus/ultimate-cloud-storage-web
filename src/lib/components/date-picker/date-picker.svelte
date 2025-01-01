@@ -14,7 +14,7 @@
 
 	function updateDisplayDate() {
 		const day = date.getDate();
-		const month = months[date.getMonth() + 1];
+		const month = months[date.getMonth()];
 		const year = date.getFullYear();
 
 		displayDate = `${day < 10 ? '0' + day : day} ${month} ${year}`;

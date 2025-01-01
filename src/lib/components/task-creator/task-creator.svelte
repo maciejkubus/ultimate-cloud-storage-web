@@ -52,6 +52,7 @@
 				});
 			}
 
+			date = new Date();
 			$form.name = '';
 			loading = false;
 		},

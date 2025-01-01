@@ -48,7 +48,7 @@ export class EventsService {
     return events;
   }
 
-  async update(id: number, data: Event) {
+  async update(id: number, data: any) {
     const res = await fetch(config.apiBaseUrl + '/events/' + id, {
 			method: 'PATCH',
 			headers: {

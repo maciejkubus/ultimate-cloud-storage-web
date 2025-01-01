@@ -2,6 +2,6 @@
 	<slot name="header" />
 </div>
 
-<div class="w-full variant-filled-surface rounded-lg p-6 shadow-lg flex flex-col gap-8">
-	<slot />
+<div class="w-full flex flex-col gap-8">
+	<slot name="list" />
 </div>

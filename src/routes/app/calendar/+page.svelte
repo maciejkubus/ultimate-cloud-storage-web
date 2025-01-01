@@ -4,6 +4,7 @@
 	import PaginationBar from '$lib/components/pagination-bar/pagination-bar.svelte';
 	import TaskCreator from '$lib/components/task-creator/task-creator.svelte';
 	import TaskList from '$lib/components/task-list/task-list.svelte';
+	import TaskTile from '$lib/components/task-tile/task-tile.svelte';
 	import type { Event } from '$lib/interfaces/event.interface';
 	import type { Expence } from '$lib/interfaces/expence.interface';
 	import type { Paginated } from '$lib/interfaces/paginated.interface';
@@ -17,8 +18,8 @@
 	let eventsService: EventsService | null = null;
 	let loading = true;
 
-	const tasks: Event[] = [];
-	const events: Event[] = [];
+	let tasks: Event[] = [];
+	let events: Event[] = [];
 	const date = {
 		year: 2000,
 		month: 1,
@@ -37,12 +38,21 @@
 	});
 
 	async function getEvents() {
+		tasks = [];
+		events = [];
 		eventsService = EventsService.getInstance();
 		const data = await eventsService.getEvents();
 		for (const item of data) {
-			if (item.type == 'event') events.push(item);
-			else if (item.type == 'task') tasks.push(item);
+			if (item.type == 'event') events = [...events, item];
+			else if (item.type == 'task') tasks = [...tasks, item];
 		}
+	}
+
+	async function remove(event: any) {
+		loading = true;
+		await eventsService?.delete(event.detail);
+		await getEvents();
+		loading = false;
 	}
 </script>
 
@@ -54,6 +64,17 @@
 	<div class="w-full xl:w-1/3">
 		<TaskList>
 			<TaskCreator slot="header" on:created={getEvents} />
+			<div slot="list" class="flex flex-col gap-4">
+				{#each tasks as task}
+					<TaskTile
+						color={task.color}
+						start={task.start}
+						id={task.id ? task.id : 0}
+						name={task.name}
+						on:remove={remove}
+					/>
+				{/each}
+			</div>
 		</TaskList>
 	</div>
 	<div class="w-full xl:w-2/3">.</div>

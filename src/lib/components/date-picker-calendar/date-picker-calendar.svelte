@@ -20,6 +20,7 @@
 		header = `${months[date.getMonth()]} ${date.getFullYear()}`;
 		maxDays = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
 
+		days = [];
 		const dayOfWeek = date.getDay();
 		for (let i = 0; i < dayOfWeek - 1; i++) {
 			days.push(null);
@@ -43,7 +44,7 @@
 			$modalStore[0].response({
 				day,
 				year: date.getFullYear(),
-				month: date.getMonth() + 1,
+				month: date.getMonth(),
 			});
 		modalStore.close();
 	}
