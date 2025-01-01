@@ -6,6 +6,7 @@
 	import { createEventDispatcher } from 'svelte';
 
 	export let expences: Expence[] = [];
+	export let hideRemoveBtn = false;
 	const dispatch = createEventDispatcher();
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString).toLocaleDateString();
@@ -57,14 +58,16 @@
 					{expence.description ? expence.description : '(Brak opisu)'}
 				</p>
 			</div>
-			<div class="flex justify-end xl:justify-center items-center pt-4 xl:pt-0">
-				<button
-					on:click|stopPropagation|preventDefault={() => openModalRemove(expence)}
-					class="text-primary-600 hover:text-primary-500"
-				>
-					<TrashCan size={24} />
-				</button>
-			</div>
+			{#if !hideRemoveBtn}
+				<div class="flex justify-end xl:justify-center items-center pt-4 xl:pt-0">
+					<button
+						on:click|stopPropagation|preventDefault={() => openModalRemove(expence)}
+						class="text-primary-600 hover:text-primary-500"
+					>
+						<TrashCan size={24} />
+					</button>
+				</div>
+			{/if}
 		</div>
 	{/each}
 </div>

@@ -1,8 +1,47 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { months } from '$lib/utils/months';
+	import type { Paginated } from '$lib/interfaces/paginated.interface';
+	import type { Expence } from '$lib/interfaces/expence.interface';
+	import { ExpencesService } from '$lib/services/expences.service';
+	import ExpencesList from '../expences-list/expences-list.svelte';
+	import PaginationBar from '../pagination-bar/pagination-bar.svelte';
 
 	export let chart: any;
+
+	let expenceService: ExpencesService;
+	let expences: Expence[] = [];
+	let expensesLoading = true;
+	let expensesDate = ''; //YYYY-MM
+	let paginationData: Paginated = {
+		page: 1,
+		totalPages: 1,
+		lastPage: 1,
+	};
+
+	const loadExpences = async (page: number) => {
+		expensesLoading = true;
+		expences = [];
+		const res = await expenceService.getExpencesInMonth(page, expensesDate);
+		expences = res.data;
+		paginationData.page = res.meta.currentPage;
+		paginationData.totalPages = res.meta.totalPages;
+		paginationData.lastPage = res.meta.totalPages;
+		expensesLoading = false;
+	};
+
+	const pageChange = async (event: CustomEvent<Paginated>) => {
+		expensesLoading = false;
+		paginationData = event.detail;
+		await loadExpences(paginationData.page);
+		expensesLoading = true;
+	};
+
+	const changeDate = async (date: string) => {
+		expensesDate = date;
+		await loadExpences(1);
+	};
+
 	let data: any[] = [];
 	let loading = true;
 	const sum = {
@@ -12,6 +51,8 @@
 	let largestCome = 0;
 
 	onMount(() => {
+		expenceService = ExpencesService.getInstance();
+
 		for (const monthKey in chart) {
 			const raw = monthKey.split('-');
 			const year = raw[0];
@@ -19,6 +60,7 @@
 			data.push({
 				year: parseInt(year),
 				month,
+				monthNum: raw[1],
 				income: chart[monthKey].income,
 				outcome: chart[monthKey].outcome,
 			});
@@ -56,8 +98,9 @@
 				<div class="w-full flex flex-col justify-end items-center">
 					<div class="w-full flex justify-center items-end gap-1">
 						<div
-							class="bg-success-600 w-12 border-b-8 border-success-700 shadow-outline shadow-success-500 tooltip-host"
+							class="bg-success-600 w-12 border-b-8 border-success-700 shadow-outline shadow-success-500 tooltip-host cursor-pointer"
 							style="height: {getBarHeight(item.income)}px"
+							on:click={() => changeDate(item.year + '-' + item.monthNum)}
 						>
 							<div class="tooltip variant-filled-secondary px-2 py-1 rounded-lg text-sm">
 								<span class="text-xs">Income</span> <br />
@@ -82,6 +125,14 @@
 					</div>
 				</div>
 			{/each}
+		</div>
+	</div>
+{/if}
+{#if expences.length > 0}
+	<div class="w-full pt-16">
+		<ExpencesList {expences} hideRemoveBtn={true} />
+		<div class="mt-8">
+			<PaginationBar data={paginationData} on:change={pageChange} />
 		</div>
 	</div>
 {/if}

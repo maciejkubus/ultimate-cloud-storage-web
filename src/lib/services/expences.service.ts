@@ -49,6 +49,20 @@ export class ExpencesService {
     return expenses;
   }
 
+  //date: YYYY-MM
+  async getExpencesInMonth(page: number, date: string): Promise<PaginatedResponse<Expence[]>> {
+    const res = await fetch(config.apiBaseUrl + '/expenses/month/'+ date +'?page=' + page, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + ExpencesService.user.access_token,
+			},
+		});
+
+    const expenses = res.json();
+    return expenses;
+  }
+
   async getStats() {
     const res = await fetch(config.apiBaseUrl + '/expenses/stats', {
 			method: 'GET',
