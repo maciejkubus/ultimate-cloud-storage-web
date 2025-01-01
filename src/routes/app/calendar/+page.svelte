@@ -32,15 +32,18 @@
 		date.year = now.getUTCFullYear();
 		date.month = now.getMonth() + 1;
 
+		await getEvents();
+		loading = false;
+	});
+
+	async function getEvents() {
 		eventsService = EventsService.getInstance();
 		const data = await eventsService.getEvents(date.year, date.month);
 		for (const item of data) {
 			if (item.type == 'event') events.push(item);
 			else if (item.type == 'task') tasks.push(item);
 		}
-
-		loading = false;
-	});
+	}
 </script>
 
 <svelte:head>
@@ -50,7 +53,7 @@
 <div class="w-full py-8 flex flex-col xl:flex-row gap-8">
 	<div class="w-full xl:w-1/3">
 		<TaskList>
-			<TaskCreator slot="header" />
+			<TaskCreator slot="header" on:created={getEvents} />
 		</TaskList>
 	</div>
 	<div class="w-full xl:w-2/3">.</div>

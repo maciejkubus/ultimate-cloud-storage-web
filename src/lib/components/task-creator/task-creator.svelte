@@ -5,13 +5,23 @@
 	import FormInput from '../form-input/form-input.svelte';
 	import DatePicker from '../date-picker/date-picker.svelte';
 	import ColorPicker from '../color-picker/color-picker.svelte';
+	import { EventsService } from '$lib/services/events.service';
+	import { onMount } from 'svelte';
+	import { toastStore } from '@skeletonlabs/skeleton';
+	import { createEventDispatcher } from 'svelte';
+	import type { Event } from '$lib/interfaces/event.interface';
 
+	const dispatch = createEventDispatcher();
 	const colors = ['#EE6533', '#3d51c9', '#159F46', '#F2087C', '#8E39AB', '#c50e4a'];
-
+	let eventsService: EventsService | null = null;
 	let collapsed = true;
 	let loading = false;
 	let date = new Date();
 	let color = '#3d51c9';
+
+	onMount(() => {
+		eventsService = EventsService.getInstance();
+	});
 
 	const { form, errors, handleChange, handleSubmit } = createForm({
 		initialValues: {
@@ -20,8 +30,30 @@
 		validationSchema: yup.object().shape({
 			name: yup.string().required('Name is required'),
 		}),
-		onSubmit: (values) => {
-			console.log(values, date.toISOString());
+		onSubmit: async (values) => {
+			loading = true;
+
+			const task: Event = {
+				name: values.name,
+				start: date.toISOString(),
+				color: color,
+				type: 'task',
+			};
+			try {
+				await eventsService?.create(task);
+				dispatch('created', task);
+				toastStore.trigger({
+					message: 'Task created',
+				});
+			} catch (error) {
+				toastStore.trigger({
+					message: error + '',
+					background: 'variant-filled-error',
+				});
+			}
+
+			$form.name = '';
+			loading = false;
 		},
 	});
 </script>
