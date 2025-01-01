@@ -1,0 +1,66 @@
+<script lang="ts">
+	import CalendarHeatMap from 'carbon-icons-svelte/lib/CalendarHeatMap.svelte';
+	import { formatDate } from '$lib/utils/format-date';
+	import { months } from '$lib/utils/months';
+	import { createEventDispatcher, onMount } from 'svelte';
+	import DatePickerCalendar from '../date-picker-calendar/date-picker-calendar.svelte';
+	import { modalStore, type ModalComponent, type ModalSettings } from '@skeletonlabs/skeleton';
+	import type { CalendarPickerResponse } from '$lib/interfaces/calendar-picker-response.interface';
+
+	export let style = '';
+	const dispatch = createEventDispatcher();
+	const date = new Date();
+	let displayDate = '';
+
+	function updateDisplayDate() {
+		const day = date.getDate();
+		const month = months[date.getMonth() + 1];
+		const year = date.getFullYear();
+
+		displayDate = `${day < 10 ? '0' + day : day} ${month} ${year}`;
+	}
+
+	onMount(() => {
+		updateDisplayDate();
+	});
+
+	let modalOpen = false;
+	const modalComponent: ModalComponent = {
+		ref: DatePickerCalendar,
+		props: {
+			date,
+		},
+	};
+	const modal: ModalSettings = {
+		type: 'component',
+		component: modalComponent,
+		response: async (response: CalendarPickerResponse) => {
+			if (!response) return;
+
+			date.setDate(response.day);
+			date.setMonth(response.month);
+			date.setFullYear(response.year);
+			modalOpen = false;
+			updateDisplayDate();
+			dispatch('change', date);
+		},
+	};
+
+	function openModal() {
+		if (!modalOpen) modalStore.trigger(modal);
+
+		modalOpen = !modalOpen;
+	}
+</script>
+
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div
+	class="px-4 py-2 variant-filled-secondary flex justify-center xl:justify-start items-center gap-2 rounded-xl shadow-lg cursor-pointer hover:bg-secondary-700 transition-all duration-150 ease-in-out {modalOpen
+		? 'bg-secondary-900'
+		: ''}"
+	{style}
+	on:click={openModal}
+>
+	<CalendarHeatMap size={24} />
+	<div>{displayDate}</div>
+</div>
