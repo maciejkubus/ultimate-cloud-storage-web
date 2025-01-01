@@ -38,7 +38,7 @@
 
 	async function getEvents() {
 		eventsService = EventsService.getInstance();
-		const data = await eventsService.getEvents(date.year, date.month);
+		const data = await eventsService.getEvents();
 		for (const item of data) {
 			if (item.type == 'event') events.push(item);
 			else if (item.type == 'task') tasks.push(item);

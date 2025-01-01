@@ -35,8 +35,8 @@ export class EventsService {
     return event;
   }
 
-  async getEvents(year: number, month: number): Promise<Event[]> {
-    const res = await fetch(config.apiBaseUrl + '/events/' + year + '-' + month, {
+  async getEvents(): Promise<Event[]> {
+    const res = await fetch(config.apiBaseUrl + '/events/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -60,7 +60,7 @@
 
 <div
 	class="w-full bg-surface-700 rounded-lg p-4 shadow-lg flex flex-col gap-8 overflow-hidden transition-all ease-in-out duration-200
-{collapsed ? 'h-[76px]' : 'h-[360px]'}"
+{collapsed ? 'h-[76px]' : 'h-[460px] xl:h-[360px]'}"
 >
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
