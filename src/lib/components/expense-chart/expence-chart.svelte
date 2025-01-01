@@ -28,8 +28,8 @@
 			sum.income += item.income;
 			sum.outcome += item.outcome;
 
-			if (sum.income > largestCome) largestCome = sum.income;
-			if (sum.outcome > largestCome) largestCome = sum.outcome;
+			if (item.income > largestCome) largestCome = item.income;
+			if (item.outcome > largestCome) largestCome = item.outcome;
 		}
 		loading = false;
 	});
@@ -37,6 +37,7 @@
 	function getBarHeight(money: number) {
 		const percentege = (money / largestCome) * 100;
 		const height = percentege * 3;
+		console.log({ money, percentege, height });
 		return height;
 	}
 </script>
@@ -50,7 +51,7 @@
 				<div>Outcome: {sum.outcome.toFixed(2)} zł</div>
 			</div>
 		</div>
-		<div class="flex">
+		<div class="flex min-h-[300px]">
 			{#each data as item}
 				<div class="w-full flex flex-col justify-end items-center">
 					<div class="w-full flex justify-center items-end gap-1">
