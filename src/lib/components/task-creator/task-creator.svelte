@@ -10,9 +10,9 @@
 	import { toastStore } from '@skeletonlabs/skeleton';
 	import { createEventDispatcher } from 'svelte';
 	import type { Event } from '$lib/interfaces/event.interface';
+	import { colors } from '$lib/utils/calendar-colors';
 
 	const dispatch = createEventDispatcher();
-	const colors = ['#EE6533', '#3d51c9', '#159F46', '#F2087C', '#8E39AB', '#c50e4a'];
 	let eventsService: EventsService | null = null;
 	let collapsed = true;
 	let loading = false;
