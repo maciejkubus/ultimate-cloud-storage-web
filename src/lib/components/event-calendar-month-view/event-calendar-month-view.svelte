@@ -89,13 +89,13 @@
 	</div>
 	<div class="w-full grid grid-cols-7 bg-surface-500 gap-2 text-lg">
 		{#each ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as weekDay}
-			<div class="p-4 text-center font-extrabold bg-surface-900 shadow-xl">
+			<div class="p-4 text-center font-extrabold bg-surface-900 shadow-xl rounded-lg">
 				{weekDay}
 			</div>
 		{/each}
 		{#each days as day, index}
 			<button
-				class="pt-3 pb-4 flex flex-col justify-center items-center relative shadow-lg transition-all duration-200 ease-out
+				class="pt-3 pb-4 flex flex-col justify-center items-center relative shadow-lg transition-all duration-200 ease-out rounded-lg
             {index % 7 == 6 ? 'text-rose-600 font-bold' : ''}
             {day != null
 					? 'bg-surface-700 hover:bg-surface-800 shadow-md hover:-translate-y-1'

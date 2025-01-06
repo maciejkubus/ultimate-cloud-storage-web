@@ -3,7 +3,6 @@
 	import { months } from '$lib/utils/months';
 
 	export let event: Event;
-	export let region: string = '';
 
 	function displayDate(d: Date) {
 		const day = d.getDate();
@@ -19,9 +18,11 @@
 	}
 </script>
 
-<div class="w-full px-4 xl:px-8 py-4 space-y-2 relative {region}">
+<div
+	class="w-full pr-4 xl:pr-8 pl-8 xl:pl-10 py-4 space-y-2 relative variant-filled-surface rounded-xl shadow-lg mb-4 overflow-hidden"
+>
 	<div
-		class="absolute top-0 left-0 h-12 w-1 animate-pulse"
+		class="absolute top-0 left-0 h-full w-2 xl:w-4 animate-pulse"
 		style="background-color: {event.color};"
 	/>
 	<div class="flex flex-col xl:flex-row gap-2 xl:justify-between">
@@ -33,7 +34,10 @@
 			{/if}
 		</div>
 	</div>
-	{#if event.description}
-		<div class="text-gray-300 text-lg">{event.description}</div>
-	{/if}
+	<div
+		class="text-gray-300 text-lg
+  {event.description && event.description.length > 0 ? '' : 'italic'}"
+	>
+		{event.description && event.description.length > 0 ? event.description : 'No description.'}
+	</div>
 </div>

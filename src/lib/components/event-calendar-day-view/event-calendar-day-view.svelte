@@ -34,9 +34,14 @@
 </script>
 
 {#if loaded}
-	<div class="variant-filled-surface py-4 xl:py-8 rounded-xl shadow-lg space-y-4">
-		<div class="w-full flex gap-8 justify-between items-center px-4 xl:px-8">
-			<button on:click={goToCalendar}> <ArrowLeft size={32} /> </button>
+	<div class="py-4 xl:py-8 space-y-8">
+		<div
+			class="w-full flex gap-8 justify-between items-center p-4 xl:p-8 variant-filled-surface rounded-xl shadow-lg"
+		>
+			<button on:click={goToCalendar} class="tooltip-host">
+				<div class="tooltip variant-filled-secondary p-2 pb-1 rounded-lg text-sm">Back</div>
+				<ArrowLeft size={32} />
+			</button>
 			<div class="text-xl text-center xl:w-[330px]">
 				{(date.getDate() < 10 ? '0' + '' : '') + date.getDate()}
 				{months[date.getMonth()]}
@@ -44,9 +49,9 @@
 			</div>
 			<div />
 		</div>
-		<div class="pt-4">
-			{#each events as event, index}
-				<EventTile {event} region={index % 2 == 1 ? 'bg-surface-700' : 'bg-surface-900'} />
+		<div class="">
+			{#each events as event}
+				<EventTile {event} />
 			{/each}
 		</div>
 	</div>
