@@ -1,3 +1,5 @@
+import { months } from "./months";
+
 export const formatDate = (date: string, format: string): string => {
   const dateObj = new Date(date);
   
@@ -16,6 +18,7 @@ export const formatDate = (date: string, format: string): string => {
 
   let formatStr = format;
   formatStr = formatStr.replace('DD', '' + dayStr);
+  formatStr = formatStr.replace('M+', months[month - 1]);
   formatStr = formatStr.replace('MM', '' + monthStr);
   formatStr = formatStr.replace('YYYY', '' + year);
   formatStr = formatStr.replace('HH', '' + hourStr);

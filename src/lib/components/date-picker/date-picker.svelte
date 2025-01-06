@@ -9,10 +9,11 @@
 
 	export let style = '';
 	const dispatch = createEventDispatcher();
-	const date = new Date();
+	export let date: Date = new Date();
 	let displayDate = '';
 
 	function updateDisplayDate() {
+		// if (date == undefined) date = new Date();
 		const day = date.getDate();
 		const month = months[date.getMonth()];
 		const year = date.getFullYear();
@@ -24,6 +25,8 @@
 
 		displayDate = `${day < 10 ? '0' + day : day} ${month} ${year}, ${hour}:${minute}`;
 	}
+
+	$: updateDisplayDate();
 
 	onMount(() => {
 		updateDisplayDate();

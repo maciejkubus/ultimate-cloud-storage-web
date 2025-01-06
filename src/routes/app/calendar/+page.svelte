@@ -14,6 +14,7 @@
 	import { pageMetadataStore } from '$lib/stores/page-metadata.store';
 	import { months } from '$lib/utils/months';
 	import { onMount } from 'svelte';
+	import EventCalendar from '$lib/components/event-calendar/event-calendar.svelte';
 
 	let eventsService: EventsService | null = null;
 	let loading = true;
@@ -77,7 +78,8 @@
 			</div>
 		</TaskList>
 	</div>
-	<div class="w-full xl:w-2/3">
+	<div class="w-full xl:w-2/3 space-y-4">
 		<EventCreator on:created={getEvents} createEvent={true}>Add event</EventCreator>
+		<EventCalendar {events} />
 	</div>
 </div>

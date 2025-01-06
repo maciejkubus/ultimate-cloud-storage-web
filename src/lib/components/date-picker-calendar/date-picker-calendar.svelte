@@ -6,6 +6,7 @@
 		modalStore,
 		popup,
 		toastStore,
+		type ModalSettings,
 		type PopupSettings,
 	} from '@skeletonlabs/skeleton';
 	import { months } from '$lib/utils/months';
@@ -42,7 +43,8 @@
 		maxDays = getMonthLenght(date.getMonth(), date.getFullYear());
 
 		days = [];
-		const dayOfWeek = date.getDay();
+		const firstOfTheMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+		const dayOfWeek = firstOfTheMonth.getDay();
 		for (let i = 0; i < dayOfWeek - 1; i++) {
 			days.push(null);
 		}
@@ -94,13 +96,11 @@
 		<button on:click={nextMonth}> <ArrowRight size={24} /> </button>
 	</div>
 	<div class="w-full grid grid-cols-7">
-		<div class="p-4 text-center font-extrabold">Mo</div>
-		<div class="p-4 text-center font-extrabold">Tu</div>
-		<div class="p-4 text-center font-extrabold">We</div>
-		<div class="p-4 text-center font-extrabold">Th</div>
-		<div class="p-4 text-center font-extrabold">Fr</div>
-		<div class="p-4 text-center font-extrabold">Sa</div>
-		<div class="p-4 text-center font-extrabold">Su</div>
+		{#each ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as day}
+			<div class="p-4 text-center font-extrabold">
+				{day}
+			</div>
+		{/each}
 		{#each days as day, index}
 			<button
 				class="p-4 text-center aspect-square rounded-full transition-all duration-150 ease-in-out
