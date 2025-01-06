@@ -14,6 +14,12 @@
 	let loaded = false;
 
 	onMount(async () => {
+		loadEvents();
+	});
+
+	async function loadEvents() {
+		loaded = false;
+		events = [];
 		events = await eventsService.getEvents();
 		events = events
 			.filter((e) => e.type == 'event')
@@ -26,7 +32,7 @@
 				);
 			});
 		loaded = true;
-	});
+	}
 
 	function goToCalendar() {
 		dispatch('goToCalendar');
@@ -51,7 +57,7 @@
 		</div>
 		<div class="">
 			{#each events as event}
-				<EventTile {event} />
+				<EventTile {event} on:refresh={loadEvents} />
 			{/each}
 		</div>
 	</div>

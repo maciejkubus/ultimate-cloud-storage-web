@@ -74,7 +74,14 @@
 	}
 
 	function submit() {
-		if ($modalStore[0].response) $modalStore[0].response(date.toISOString());
+		if ($modalStore[0].response)
+			$modalStore[0].response({
+				day: date.getDate(),
+				month: date.getMonth(),
+				year: date.getFullYear(),
+				hour: date.getHours(),
+				minute: date.getMinutes(),
+			});
 		modalStore.close();
 	}
 
