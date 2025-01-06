@@ -12,6 +12,10 @@
 	import type { Note } from '$lib/interfaces/note.interface';
 	import { goto } from '$app/navigation';
 	import NoteTile from '$lib/components/note-tile/note-tile.svelte';
+	import { EventsService } from '$lib/services/events.service';
+	import type { Event } from '$lib/interfaces/event.interface';
+	import TaskList from '$lib/components/task-list/task-list.svelte';
+	import TaskTile from '$lib/components/task-tile/task-tile.svelte';
 
 	let files: File[] = [];
 	const filesService = FilesService.getInstance();
@@ -20,12 +24,16 @@
 	let notes: Note[] = [];
 	let loaded = false;
 
+	let eventsService: EventsService | null = null;
+	let tasks: Event[] = [];
+
 	onMount(() => {
 		pageMetadataStore.set({
 			title: 'Home',
 		});
 		loadFiles();
 		loadNotes();
+		loadTasks();
 	});
 
 	const loadFiles = async () => {
@@ -41,12 +49,41 @@
 		notes = res.data.slice(0, 3);
 	};
 
+	const loadTasks = async () => {
+		tasks = [];
+		eventsService = EventsService.getInstance();
+		const data = await eventsService.getEvents();
+		for (const item of data) {
+			if (item.type == 'task') tasks = [...tasks, item];
+		}
+	};
+
 	const remove = () => {
 		loadFiles();
 	};
+
+	async function removeTask(event: any) {
+		await eventsService?.delete(event.detail);
+		await loadTasks();
+	}
 </script>
 
-<h2 class="font-semibold text-4xl mb-8">Recent albums</h2>
+<h2 class="font-semibold text-4xl mb-8">Tasks</h2>
+<TaskList>
+	<div slot="list" class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+		{#each tasks as task}
+			<TaskTile
+				color={task.color}
+				start={task.start}
+				id={task.id ? task.id : 0}
+				name={task.name}
+				on:remove={removeTask}
+			/>
+		{/each}
+	</div>
+</TaskList>
+
+<h2 class="font-semibold text-4xl my-8">Recent albums</h2>
 <AlbumExplorer paginationVisible={false} />
 
 <h2 class="font-semibold text-4xl mb-8">Recent notes</h2>
