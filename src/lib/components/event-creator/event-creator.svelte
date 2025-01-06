@@ -41,6 +41,7 @@
 
 			const task: Event = {
 				name: values.name,
+				description: values.description,
 				start: date.toISOString(),
 				color: color,
 				type: createEvent ? 'event' : 'task',

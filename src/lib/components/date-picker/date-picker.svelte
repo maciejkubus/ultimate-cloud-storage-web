@@ -9,7 +9,7 @@
 
 	export let style = '';
 	const dispatch = createEventDispatcher();
-	export let date: Date = new Date();
+	let date: Date = new Date();
 	let displayDate = '';
 
 	function updateDisplayDate() {
