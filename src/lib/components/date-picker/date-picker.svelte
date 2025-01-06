@@ -16,8 +16,13 @@
 		const day = date.getDate();
 		const month = months[date.getMonth()];
 		const year = date.getFullYear();
+		let hour = date.getHours().toString();
+		let minute = date.getMinutes().toString();
 
-		displayDate = `${day < 10 ? '0' + day : day} ${month} ${year}`;
+		if (hour.length == 1) hour = '0' + hour;
+		if (minute.length == 1) minute = '0' + minute;
+
+		displayDate = `${day < 10 ? '0' + day : day} ${month} ${year}, ${hour}:${minute}`;
 	}
 
 	onMount(() => {
@@ -37,9 +42,11 @@
 		response: async (response: CalendarPickerResponse) => {
 			if (!response) return;
 
-			date.setDate(response.day);
-			date.setMonth(response.month);
-			date.setFullYear(response.year);
+			const newDate = new Date(response + '');
+
+			date.setDate(newDate.getDate());
+			date.setMonth(newDate.getMonth());
+			date.setFullYear(newDate.getFullYear());
 			modalOpen = false;
 			updateDisplayDate();
 			dispatch('change', date);

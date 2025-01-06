@@ -2,7 +2,7 @@
 	import ExpenceAdder from '$lib/components/expence-adder/expence-adder.svelte';
 	import ExpencesList from '$lib/components/expences-list/expences-list.svelte';
 	import PaginationBar from '$lib/components/pagination-bar/pagination-bar.svelte';
-	import TaskCreator from '$lib/components/task-creator/task-creator.svelte';
+	import EventCreator from '$lib/components/event-creator/event-creator.svelte';
 	import TaskList from '$lib/components/task-list/task-list.svelte';
 	import TaskTile from '$lib/components/task-tile/task-tile.svelte';
 	import type { Event } from '$lib/interfaces/event.interface';
@@ -63,7 +63,7 @@
 <div class="w-full py-8 flex flex-col xl:flex-row gap-8">
 	<div class="w-full xl:w-1/3">
 		<TaskList>
-			<TaskCreator slot="header" on:created={getEvents} />
+			<EventCreator slot="header" on:created={getEvents}>Add task</EventCreator>
 			<div slot="list" class="flex flex-col gap-4">
 				{#each tasks as task}
 					<TaskTile
@@ -77,5 +77,7 @@
 			</div>
 		</TaskList>
 	</div>
-	<div class="w-full xl:w-2/3">.</div>
+	<div class="w-full xl:w-2/3">
+		<EventCreator on:created={getEvents} createEvent={true}>Add event</EventCreator>
+	</div>
 </div>
