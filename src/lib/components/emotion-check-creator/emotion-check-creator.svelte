@@ -64,6 +64,7 @@
 			year: parseInt(year),
 			hour: parseInt(hour),
 			minute: parseInt(minute),
+			emotions: [],
 		};
 
 		if (
@@ -106,7 +107,7 @@
 			<div class="w-16 lg:w-24">
 				<label for="day" class="pl-2 pb-1">Day</label>
 				<input
-					class="input autocomplete"
+					class="input autocomplete text-lg"
 					type="search"
 					name="day"
 					bind:value={day}
@@ -134,7 +135,7 @@
 			<div class="w-16 lg:w-24">
 				<label for="month" class="pl-2 pb-1">Month</label>
 				<input
-					class="input autocomplete"
+					class="input autocomplete text-lg"
 					type="search"
 					name="month"
 					bind:value={month}
@@ -162,7 +163,7 @@
 			<div class="w-16 lg:w-24">
 				<label for="year" class="pl-2 pb-1">Year</label>
 				<input
-					class="input autocomplete"
+					class="input autocomplete text-lg"
 					type="search"
 					name="year"
 					bind:value={year}
@@ -191,7 +192,7 @@
 			<div class="w-16 lg:w-24">
 				<label for="hour" class="pl-2 pb-1">Hour</label>
 				<input
-					class="input autocomplete"
+					class="input autocomplete text-lg"
 					type="search"
 					name="hour"
 					bind:value={hour}
@@ -218,7 +219,7 @@
 			<div class="w-16 lg:w-24">
 				<label for="minute" class="pl-2 pb-1">Minute</label>
 				<input
-					class="input autocomplete"
+					class="input autocomplete text-lg"
 					type="search"
 					name="minute"
 					bind:value={minute}

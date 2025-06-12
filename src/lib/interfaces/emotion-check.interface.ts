@@ -7,5 +7,6 @@ export interface EmotionCheck {
   year: number;
   hour: number;
   minute: number;
-  emotions?: Emotion[]
+  date?: Date;
+  emotions: Emotion[]
 }

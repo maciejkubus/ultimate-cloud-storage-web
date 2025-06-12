@@ -30,14 +30,14 @@
 	{#each emotions as emotion}
 		<button
 			type="button"
-			class="flex flex-row justify-center items-center gap-1 p-2 relative rounded-xl overflow-hidden border-2 border-solid border-slate-700 bg-slate-700 bg-opacity-50 {selectedIds.indexOf(
+			class="flex flex-row justify-center items-center gap-1 py-1 px-2 relative rounded-xl overflow-hidden border-2 border-solid border-slate-700 bg-slate-700 bg-opacity-50 {selectedIds.indexOf(
 				emotion.id,
 			) > -1
 				? 'bg-emerald-200 bg-opacity-0 border-emerald-700 shadow-lg'
 				: ''}"
 			on:click={() => toggle(emotion.id)}
 		>
-			<span class="lg:text-xl">{emotion.emoticon}</span>
+			<span class="lg:text-lg">{emotion.emoticon}</span>
 			{emotion.name}
 		</button>
 	{/each}

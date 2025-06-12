@@ -18,12 +18,39 @@
 	import EmotionCreator from '$lib/components/emotion-creator/emotion-creator.svelte';
 	import EmotionsList from '$lib/components/emotions-list/emotions-list.svelte';
 	import EmotionCheckCreator from '$lib/components/emotion-check-creator/emotion-check-creator.svelte';
+	import { EmotionCheckService } from '$lib/services/emotion-check.service';
+	import type { EmotionCheck } from '$lib/interfaces/emotion-check.interface';
+	import EmotionCheckTile from '$lib/components/emotion-check-tile/emotion-check-tile.svelte';
+	import AlbumExplorer from '$lib/components/album-explorer/album-explorer.svelte';
+
+	let emotionCheckService: EmotionCheckService;
+	let emotionChecks: EmotionCheck[] = [];
 
 	onMount(async () => {
+		emotionCheckService = EmotionCheckService.getInstance();
+		await loadEmotionCheks();
 		pageMetadataStore.set({
 			title: 'Emotions',
 		});
 	});
+
+	const loadEmotionCheks = async () => {
+		emotionChecks = await emotionCheckService.getEmotionChecks();
+		for (const ec of emotionChecks) {
+			ec.date = new Date(`${ec.day}.${ec.month}.${ec.year} ${ec.hour}:${ec.minute}`);
+		}
+		emotionChecks.sort((a, b) => {
+			if (!b.date || !a.date) return 0;
+
+			const time = b.date.getTime() - a.date.getTime();
+			return time;
+		});
+	};
+
+	const remove = async (e: CustomEvent<number>) => {
+		await emotionCheckService.delete(e.detail);
+		await loadEmotionCheks();
+	};
 </script>
 
 <svelte:head>
@@ -33,6 +60,11 @@
 <div class="w-full py-8 flex flex-col lg:flex-row gap-8">
 	<EmotionsList />
 	<div class="w-full lg:w-3/4">
-		<EmotionCheckCreator />
+		<EmotionCheckCreator on:created={loadEmotionCheks} />
+		<div class="space-y-8 mt-8">
+			{#each emotionChecks as emotionCheck}
+				<EmotionCheckTile {emotionCheck} on:remove={remove} />
+			{/each}
+		</div>
 	</div>
 </div>

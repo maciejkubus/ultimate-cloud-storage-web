@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import EmotionCreator from '../emotion-creator/emotion-creator.svelte';
 	import type { Emotion } from '$lib/interfaces/emotion.interface';
+	import { emotionsStore } from '$lib/stores/emotions.store';
 
 	let emotionsService: EmotionsService | null = null;
 	let emotions: Emotion[] | any = [];
@@ -10,6 +11,7 @@
 	onMount(async () => {
 		emotionsService = EmotionsService.getInstance();
 		emotions = await emotionsService.getEmotions();
+		emotionsStore.set(emotions);
 	});
 
 	const emotionCreated = (e: { detail: Emotion }) => {
