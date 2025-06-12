@@ -34,6 +34,10 @@
 			url: '/app/calendar',
 		},
 		{
+			name: 'Emotions',
+			url: '/app/emotions',
+		},
+		{
 			name: 'Notes',
 			url: '/app/notes',
 		},
