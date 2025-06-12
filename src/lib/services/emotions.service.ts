@@ -20,7 +20,7 @@ export class EmotionsService {
     return EmotionsService.instance;
   }
 
-  async create(content: Emotion): Promise<Emotion> {
+  async create(content: Partial<Emotion>): Promise<Emotion> {
     const res = await fetch(config.apiBaseUrl + '/emotions', {
       method: 'POST',
       headers: {

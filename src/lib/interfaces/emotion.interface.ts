@@ -1,5 +1,5 @@
 export interface Emotion {
-  id?: number;
+  id: number;
   name: string;
   emoticon: string;
 }

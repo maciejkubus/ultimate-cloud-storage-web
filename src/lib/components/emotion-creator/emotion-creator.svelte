@@ -24,7 +24,7 @@
 		onSubmit: async (values) => {
 			loading = true;
 
-			const emotion: Emotion = {
+			const emotion = {
 				name: values.name,
 				emoticon: emoticon,
 			};

@@ -17,6 +17,7 @@
 	import EventCalendar from '$lib/components/event-calendar/event-calendar.svelte';
 	import EmotionCreator from '$lib/components/emotion-creator/emotion-creator.svelte';
 	import EmotionsList from '$lib/components/emotions-list/emotions-list.svelte';
+	import EmotionCheckCreator from '$lib/components/emotion-check-creator/emotion-check-creator.svelte';
 
 	onMount(async () => {
 		pageMetadataStore.set({
@@ -31,5 +32,7 @@
 
 <div class="w-full py-8 flex flex-col lg:flex-row gap-8">
 	<EmotionsList />
-	<div class="w-full lg:w-3/4">dupa</div>
+	<div class="w-full lg:w-3/4">
+		<EmotionCheckCreator />
+	</div>
 </div>
